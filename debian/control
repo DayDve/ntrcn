@@ -23,6 +23,7 @@ Depends: ${misc:Depends},
          python3-pyside6.qtnetwork,
          python3-pyside6.qtsvg,
          python3-pyside6.qtwidgets (>= 6.5),
+         qt6-svg-plugins | qt6-svg,
          wl-clipboard,
 Recommends: hunspell-dictionary,
 Description: retype text typed in the wrong keyboard layout

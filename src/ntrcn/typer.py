@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import time
 from collections.abc import Iterable
+from typing import Any
 
 from evdev import UInput
 from evdev import ecodes as e
@@ -28,7 +29,8 @@ class Typer:
             PermissionError: If /dev/uinput is not writable by the user.
         """
         keys = CHAR_KEYS | {e.KEY_LEFTSHIFT, e.KEY_BACKSPACE, e.KEY_ENTER}
-        self._device = UInput(
+        # Any: older python3-evdev (Debian 13) has no type hints for UInput's methods.
+        self._device: Any = UInput(
             {e.EV_KEY: sorted(keys)}, name=DEVICE_NAME, vendor=VENDOR_ID, product=PRODUCT_ID
         )
 
