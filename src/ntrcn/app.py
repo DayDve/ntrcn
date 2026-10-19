@@ -54,7 +54,7 @@ class Session:
         """Start converting and show the tray icon."""
         self.config = load_config()
         kde = KdeLayouts(bus)
-        self.tray = Tray(kde.set, self.show_settings)
+        self.tray = Tray(bus, kde.set, self.show_settings)
         self.watcher = InputWatcher()
         self.converter = Converter(
             kde,

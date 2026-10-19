@@ -72,3 +72,10 @@ def test_real_dictionary_if_installed() -> None:
     assert dictionary.knows("Привет")
     assert not dictionary.knows("руддщ")
     assert not dictionary.knows("hello")
+
+
+def test_layout_title_falls_back_to_the_short_name() -> None:
+    from ntrcn.layouts import Layout
+
+    assert Layout("epo", "", "EO").title == "EO"
+    assert Layout("us", "", "EN", "English (US)").title  # translated or as is
