@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import configparser
+import gettext
 import logging
 from collections.abc import Callable
 from pathlib import Path
@@ -21,7 +22,17 @@ class Layout(NamedTuple):
 
     name: str
     variant: str
-    label: str
+    label: str  # short name, e.g. "EN"
+    description: str = ""  # e.g. "English (US)"
+
+    @property
+    def title(self) -> str:
+        """Full name in the user's language, as Plasma shows it."""
+        return (
+            gettext.dgettext("xkeyboard-config", self.description)
+            if self.description
+            else self.label
+        )
 
 
 def read_variants(kxkbrc: Path = KXKBRC) -> list[str]:
@@ -47,9 +58,9 @@ class KdeLayouts:
         """Return the configured layouts in Plasma's order."""
         variants = read_variants()
         layouts = []
-        for i, (name, short_name, _long_name) in enumerate(self._iface.getLayoutsList()):
+        for i, (name, short_name, long_name) in enumerate(self._iface.getLayoutsList()):
             variant = variants[i] if i < len(variants) else ""
-            layouts.append(Layout(str(name), variant, str(short_name)))
+            layouts.append(Layout(str(name), variant, str(short_name), str(long_name)))
         return layouts
 
     def current(self) -> int:
