@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [master, develop]
+    tags: ["v*"]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    # The same system packages the .deb depends on.
+    container: debian:trixie
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - name: Install dependencies
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends ca-certificates git make \
+            python3 python3-venv python3-pip python3-evdev python3-dbus \
+            python3-pyside6.qtwidgets python3-pyside6.qtsvg python3-pyside6.qtnetwork qt6-svg-plugins \
+            libxkbcommon0 xkb-data libhunspell-1.7-0 hunspell-en-us hunspell-ru
+      - uses: actions/checkout@v4
+      - name: Install linters and pytest
+        run: python3 -m venv --system-site-packages .venv && .venv/bin/pip install -q pytest ruff mypy
+      - name: make check
+        run: make check
+
+  deb:
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build, check contents, test installation
+        run: make deb deb-check deb-test
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deb
+          path: dist/*.deb
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: deb
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: deb
+          path: dist
+      - name: Check that the tag matches the version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          grep -q "^version = \"$version\"$" pyproject.toml
+          grep -q "^__version__ = \"$version\"$" src/ntrcn/__init__.py
+          head -1 debian/changelog | grep -q "($version)"
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          # The notes are the CHANGELOG section of this version.
+          awk -v v="$version" '/^## \[/ { on = index($0, "[" v "]") > 0; next } on' CHANGELOG.md > notes.md
+          gh release create "$GITHUB_REF_NAME" dist/*.deb --title "ntrcn $version" --notes-file notes.md
