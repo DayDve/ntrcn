@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect x="8" y="12" width="112" height="108" rx="24" fill="#1d6fa5"/>
+  <rect x="8" y="8" width="112" height="100" rx="24" fill="#3daee9"/>
+  <g stroke="#fff"><g fill="none" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path d="M32.1 69.6A34 34 0 0 1 75.6 26.1"/><path d="M68.3 14.0L75.6 26.1L62.3 30.6"/><path d="M95.9 46.4A34 34 0 0 1 52.4 89.9"/><path d="M59.7 102.0L52.4 89.9L65.7 85.4"/></g></g>
+  <text x="64" y="70" fill="#fff" font-family="sans-serif" font-weight="800" font-size="32" text-anchor="middle">Aa</text>
+</svg>

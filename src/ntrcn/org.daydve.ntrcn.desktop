@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=ntrcn
+GenericName=Layout fixer
+GenericName[ru]=Исправление раскладки
+Comment=Retype text typed in the wrong keyboard layout (Pause / Shift+Pause)
+Comment[ru]=Исправление текста, набранного не в той раскладке (Pause / Shift+Pause)
+Exec=ntrcn
+Icon=org.daydve.ntrcn
+Categories=Utility;Qt;
+Actions=settings;
+
+[Desktop Action settings]
+Name=Settings
+Name[ru]=Настройки
+Exec=ntrcn --settings

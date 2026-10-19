@@ -1,0 +1,32 @@
+Source: ntrcn
+Section: utils
+Priority: optional
+Maintainer: DayDve <daydve@smbit.pro>
+Build-Depends: debhelper-compat (= 13),
+               dh-python,
+               pybuild-plugin-pyproject,
+               python3-all,
+               python3-setuptools,
+Standards-Version: 4.7.0
+Homepage: https://github.com/DayDve/ntrcn
+Rules-Requires-Root: no
+
+Package: ntrcn
+Architecture: all
+Depends: ${misc:Depends},
+         ${python3:Depends},
+         libhunspell-1.7-0,
+         libxkbcommon0,
+         pipewire-bin | pulseaudio-utils,
+         python3-dbus,
+         python3-evdev,
+         python3-pyside6.qtnetwork,
+         python3-pyside6.qtsvg,
+         python3-pyside6.qtwidgets (>= 6.5),
+         wl-clipboard,
+Recommends: hunspell-dictionary,
+Description: retype text typed in the wrong keyboard layout
+ Pause retypes the end of what was typed in the wrong layout, Shift+Pause the
+ selected text, choosing the layouts and the start of the mistyped part with
+ hunspell dictionaries. For KDE Plasma 6 on Wayland, with any number of
+ layouts. Shows the current layout in the system tray.

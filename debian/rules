@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+export PYBUILD_NAME=ntrcn
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild
+
+# Dependencies are listed in debian/control; guessing them from pyproject.toml would
+# map PySide6 and dbus-python to package names that do not exist.
+override_dh_python3:
+	dh_python3 --no-guessing-deps
+
+# The tests need a Plasma session and input devices; they run with `make check`.
+override_dh_auto_test:
