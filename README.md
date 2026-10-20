@@ -20,6 +20,8 @@ typing. Works in any application, terminals included, and with any number of lay
 - With three or more layouts, the dictionaries pick the right target layout.
 - Tray indicator: flag, layout name, both, the app icon, or nothing.
 - Optional sound, configurable hotkey, autostart, a diagnostics page.
+- Interface in English and Russian; translations are welcome (see
+  [CONTRIBUTING.md](CONTRIBUTING.md)).
 
 ## Requirements
 

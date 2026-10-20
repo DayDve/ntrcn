@@ -4,6 +4,8 @@ from collections.abc import Iterator
 import pytest
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+# Tests check the untranslated (English) strings, whatever the language of the machine.
+os.environ["LANGUAGE"] = "C"
 from PySide6.QtWidgets import QApplication  # noqa: E402
 
 

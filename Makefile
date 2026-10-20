@@ -6,7 +6,7 @@ DESKTOP_FILE := src/ntrcn/org.daydve.ntrcn.desktop
 APP_ICON := src/ntrcn/icons/org.daydve.ntrcn.svg
 ICONS_DIR ?= $(HOME)/.local/share/icons/hicolor/scalable/apps
 
-.PHONY: help test lint format check run e2e install-user uninstall-user deb deb-check deb-test clean
+.PHONY: help test lint format check run e2e pot translations install-user uninstall-user deb deb-check deb-test clean
 
 help:
 	@echo "make test           - run tests"
@@ -15,6 +15,8 @@ help:
 	@echo "make check          - lint + test"
 	@echo "make run            - run ntrcn from the source tree with debug logging"
 	@echo "make e2e            - live test on this desktop (types into its own window)"
+	@echo "make pot            - extract UI strings into po/ntrcn.pot and update po/*.po"
+	@echo "make translations   - compile po/*.po for running from the source tree"
 	@echo "make install-user   - install ~/.local/bin/ntrcn (runs this checkout), menu entry, autostart"
 	@echo "make uninstall-user - remove what install-user installed"
 	@echo "make deb           - build the .deb in a Debian container (needs docker)"
@@ -28,14 +30,28 @@ lint:
 	$(PYTHON) -m ruff check src tests scripts
 	$(PYTHON) -m ruff format --check src tests scripts
 	$(PYTHON) -m mypy src
+	for po in po/*.po; do msgfmt --check -o /dev/null $$po || exit 1; done
 
 format:
 	$(PYTHON) -m ruff format src tests scripts
 
 check: lint test
 
-run:
+run: translations
 	PYTHONPATH=src python3 -m ntrcn --debug
+
+pot:
+	xgettext --language=Python --keyword=_ --keyword=N_ --from-code=UTF-8 --package-name=ntrcn \
+	  --msgid-bugs-address=https://github.com/DayDve/ntrcn/issues --add-comments=TRANSLATORS \
+	  --sort-by-file -o po/ntrcn.pot src/ntrcn/*.py src/ntrcn/flags/*.py
+	for po in po/*.po; do msgmerge --quiet --update --backup=none $$po po/ntrcn.pot; done
+
+# Compiled catalogs are build output (not in git): src/ntrcn/locale/<lang>/LC_MESSAGES/ntrcn.mo
+translations:
+	for po in po/*.po; do \
+	  lang=$$(basename $$po .po); mkdir -p src/ntrcn/locale/$$lang/LC_MESSAGES; \
+	  msgfmt --check -o src/ntrcn/locale/$$lang/LC_MESSAGES/ntrcn.mo $$po || exit 1; \
+	done
 
 # Starts ntrcn from the source tree, drives it with scripts/e2e.py, then stops it.
 # Another running ntrcn must be stopped first; the hotkey in the config must be Pause.
@@ -44,7 +60,7 @@ e2e:
 	PYTHONPATH=src python3 -m ntrcn & pid=$$!; sleep 2; \
 	PYTHONPATH=src python3 scripts/e2e.py; rc=$$?; kill $$pid; exit $$rc
 
-install-user:
+install-user: translations
 	install -d $(BIN_DIR) $(APPS_DIR) $(ICONS_DIR)
 	printf '#!/bin/sh\nPYTHONPATH="%s/src" exec /usr/bin/python3 -m ntrcn "$$@"\n' "$(CURDIR)" > $(BIN_DIR)/ntrcn
 	chmod +x $(BIN_DIR)/ntrcn
@@ -58,7 +74,7 @@ uninstall-user:
 
 DEB_BUILD_IMAGE ?= debian:trixie
 DEB_TEST_IMAGES ?= debian:trixie ubuntu:25.10 ubuntu:26.04 invent-registry.kde.org/neon/docker-images/plasma:user
-DEB_BUILD_DEPS := build-essential debhelper dh-python pybuild-plugin-pyproject python3-all python3-setuptools
+DEB_BUILD_DEPS := build-essential debhelper dh-python gettext pybuild-plugin-pyproject python3-all python3-setuptools
 
 # Builds from a copy of the tree, so nothing on the host is touched.
 deb:
@@ -83,5 +99,5 @@ deb-test:
 	done
 
 clean:
-	rm -rf build dist src/*.egg-info .pytest_cache .mypy_cache .ruff_cache
+	rm -rf build dist src/*.egg-info src/ntrcn/locale .pytest_cache .mypy_cache .ruff_cache
 	find . -name __pycache__ -type d -prune -exec rm -rf {} +

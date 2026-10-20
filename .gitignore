@@ -41,6 +41,9 @@ htmlcov/
 *~
 .DS_Store
 
+# Compiled translations (make translations)
+src/ntrcn/locale/
+
 # Debian package builds
 *.deb
 *.changes

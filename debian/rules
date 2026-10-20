@@ -9,5 +9,9 @@ export PYBUILD_NAME=ntrcn
 override_dh_python3:
 	dh_python3 --no-guessing-deps
 
+override_dh_auto_build:
+	$(MAKE) translations
+	dh_auto_build
+
 # The tests need a Plasma session and input devices; they run with `make check`.
 override_dh_auto_test:

@@ -13,6 +13,7 @@ from PySide6.QtWidgets import QApplication
 from ntrcn.appicon import app_icon
 from ntrcn.config import Config
 from ntrcn.flags import layout_icon
+from ntrcn.i18n import _
 from ntrcn.layouts import Layout
 from ntrcn.sni import MenuItem, StatusNotifierItem, tray_available
 
@@ -71,10 +72,10 @@ class Tray:
         return [
             *layouts,
             MenuItem(),
-            MenuItem("Настройки…", self._on_settings, icon_name="configure"),
-            MenuItem("Параметры клавиатуры…", open_keyboard_settings, icon_name="input-keyboard"),
+            MenuItem(_("Settings…"), self._on_settings, icon_name="configure"),
+            MenuItem(_("Keyboard Settings…"), open_keyboard_settings, icon_name="input-keyboard"),
             MenuItem(),
-            MenuItem("Выход", QApplication.quit, icon_name="application-exit"),
+            MenuItem(_("Quit"), QApplication.quit, icon_name="application-exit"),
         ]
 
     def update(self, layouts: list[Layout], current: int) -> None:
@@ -85,7 +86,7 @@ class Tray:
             return
         layout = layouts[current]
         self._item.set_icon(self._indicator_icon(layout))
-        self._item.set_tooltip("Раскладка клавиатуры", layout.title)
+        self._item.set_tooltip(_("Keyboard Layout"), layout.title)
         self._item.set_menu(self._menu())
         if not self._item.visible and tray_available(self._bus):
             self._item.show()

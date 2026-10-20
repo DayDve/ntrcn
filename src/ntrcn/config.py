@@ -8,6 +8,8 @@ from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Any
 
+from ntrcn.i18n import N_
+
 logger = logging.getLogger(__name__)
 
 CONFIG_DIR = Path.home() / ".config" / "ntrcn"
@@ -15,17 +17,17 @@ CONFIG_FILE = CONFIG_DIR / "config.json"
 
 #: Kinds of tray indicator and their titles in the settings window.
 TRAY_INDICATORS = {
-    "flag": "Флаг",
-    "text": "Текст",
-    "flag_text": "Флаг и текст",
-    "app_icon": "Значок программы",
-    "none": "Без индикатора",
+    "flag": N_("Flag"),
+    "text": N_("Text"),
+    "flag_text": N_("Flag and text"),
+    "app_icon": N_("App icon"),
+    "none": N_("No indicator"),
 }
 #: Sound after a conversion: none, the keyboard sound or a file of the user's choice.
-SOUND_MODES = {"off": "Выкл", "on": "Вкл", "custom": "Свой звук"}
+SOUND_MODES = {"off": N_("Off"), "on": N_("On"), "custom": N_("Custom sound")}
 #: Themes of a text indicator and of the app icon in the tray.
-TEXT_THEMES = {"light": "Светлая", "dark": "Тёмная"}
-APP_ICON_THEMES = {"color": "Цветная", **TEXT_THEMES}
+TEXT_THEMES = {"light": N_("Light"), "dark": N_("Dark")}
+APP_ICON_THEMES = {"color": N_("Colour"), **TEXT_THEMES}
 
 
 @dataclass

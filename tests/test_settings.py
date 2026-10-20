@@ -59,15 +59,15 @@ class FakeDownloader:
 
 
 def buttons(window: SettingsDialog) -> list[QPushButton]:
-    return [b for b in window.findChildren(QPushButton) if b.text() == "Скачать словарь"]
+    return [b for b in window.findChildren(QPushButton) if b.text() == "Download Dictionary"]
 
 
-@pytest.mark.parametrize("error", [None, "нет сети"])
+@pytest.mark.parametrize("error", [None, "no network"])
 def test_download_button_fetches_and_rechecks(
     dialog: tuple, monkeypatch: pytest.MonkeyPatch, error: str | None
 ) -> None:
     window, _changes, _captures = dialog
-    checks = [Check("Словарь uk", False, "hint", download="uk"), Check("Клавиатура", True, "")]
+    checks = [Check("Dictionary uk", False, "hint", download="uk"), Check("Keyboard", True, "")]
     monkeypatch.setattr(settings, "run_checks", lambda _layouts: checks)
     forgotten: list[bool] = []
     monkeypatch.setattr(settings, "forget_dictionaries", lambda: forgotten.append(True))
@@ -125,3 +125,17 @@ def test_sound_file_button_only_for_own_sound(
     assert changes[-1].sound_file == "/music/tick.ogg"
     assert window._sound_file.text() == "tick.ogg"
     assert played == [Path("/music/tick.ogg")]
+
+
+def test_translations_are_used(monkeypatch: pytest.MonkeyPatch) -> None:
+    import gettext
+
+    from ntrcn import i18n
+
+    class Russian(gettext.NullTranslations):
+        def gettext(self, message: str) -> str:
+            return {"Keyboard Layout": "Раскладка клавиатуры"}.get(message, message)
+
+    monkeypatch.setattr(i18n, "_translation", Russian())
+    assert i18n._("Keyboard Layout") == "Раскладка клавиатуры"
+    assert i18n._("Quit") == "Quit"

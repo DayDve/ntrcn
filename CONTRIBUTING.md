@@ -19,6 +19,17 @@ with `make e2e`.
 - Never log typed text or key codes.
 - The udev rule only matches the `uinput` node. Input devices are read without grabbing them.
 
+## Translations
+
+The interface is written in English and translated with gettext (domain `ntrcn`).
+
+- Wrap user-visible strings in `_()` from `ntrcn.i18n`; strings defined at import time are
+  marked with `N_()` and translated with `_()` where they are shown.
+- `make pot` extracts the strings into `po/ntrcn.pot` and updates every `po/<lang>.po`.
+- To add a language, copy `po/ntrcn.pot` to `po/<lang>.po` and translate it.
+- `make translations` compiles the catalogs for running from the source tree; packages compile
+  them at build time.
+
 ## Git
 
 - `master` holds releases tagged `vX.Y.Z`, `develop` is the integration branch, work happens on

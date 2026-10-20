@@ -19,12 +19,14 @@
 ./usr/lib/python3/dist-packages/ntrcn/flags/README.md
 ./usr/lib/python3/dist-packages/ntrcn/flags/__init__.py
 ./usr/lib/python3/dist-packages/ntrcn/flags/sprite.svg
+./usr/lib/python3/dist-packages/ntrcn/i18n.py
 ./usr/lib/python3/dist-packages/ntrcn/icons/org.daydve.ntrcn-dark.svg
 ./usr/lib/python3/dist-packages/ntrcn/icons/org.daydve.ntrcn-light.svg
 ./usr/lib/python3/dist-packages/ntrcn/icons/org.daydve.ntrcn.svg
 ./usr/lib/python3/dist-packages/ntrcn/keymap.py
 ./usr/lib/python3/dist-packages/ntrcn/keys.py
 ./usr/lib/python3/dist-packages/ntrcn/layouts.py
+./usr/lib/python3/dist-packages/ntrcn/locale/ru/LC_MESSAGES/ntrcn.mo
 ./usr/lib/python3/dist-packages/ntrcn/native.py
 ./usr/lib/python3/dist-packages/ntrcn/org.daydve.ntrcn.desktop
 ./usr/lib/python3/dist-packages/ntrcn/selection.py
