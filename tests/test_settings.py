@@ -9,7 +9,7 @@ from ntrcn.config import Config
 from ntrcn.diagnostics import Check
 from ntrcn.settings import SettingsDialog
 
-SHORTCUTS = {"fix-typed": "Pause", "fix-selection": ""}
+SHORTCUTS = {"fix-typed": "Pause", "fix-selection": "", "change-case": "Ctrl+Pause"}
 
 
 @pytest.fixture
@@ -24,6 +24,7 @@ def test_shortcuts_come_from_kde(dialog: tuple) -> None:
     window._show_shortcuts()
     assert "Pause" in window._shortcut_labels["fix-typed"].text()
     assert "Not set" in window._shortcut_labels["fix-selection"].text()
+    assert "Ctrl+Pause" in window._shortcut_labels["change-case"].text()
     texts = [button.text() for button in window.findChildren(QPushButton)]
     assert "Configure Shortcuts…" in texts  # opens System Settings; not clicked in tests
 

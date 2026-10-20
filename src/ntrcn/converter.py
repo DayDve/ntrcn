@@ -8,7 +8,16 @@ from collections.abc import Callable
 
 from PySide6.QtCore import QTimer
 
-from ntrcn.convert import Fragment, Speller, next_layout, plan_retype, retyped_text, wrong_fragment
+from ntrcn.convert import (
+    Fragment,
+    Speller,
+    next_case,
+    next_layout,
+    plan_retype,
+    plan_typing,
+    retyped_text,
+    wrong_fragment,
+)
 from ntrcn.keymap import layout_chars
 from ntrcn.keys import MODIFIERS, KeyBuffer, TypedKey
 from ntrcn.layouts import KdeLayouts, Layout
@@ -93,6 +102,10 @@ class Converter:
     def fix_selection(self) -> None:
         """Retype the selected text in another layout (global shortcut)."""
         self._start(self._convert_selection)
+
+    def change_case(self) -> None:
+        """Cycle the case of the selected text (global shortcut)."""
+        self._start(self._change_case)
 
     def _start(self, action: Callable[[], None]) -> None:
         if self._busy:
@@ -197,4 +210,31 @@ class Converter:
         self._on_convert()
         self._switch_to(plan.target)
         self._typer.type(plan.strokes)
+        self.buffer.reset()
+
+    def _change_case(self) -> None:
+        text = read_primary_selection()
+        if not text or len(text) > MAX_SELECTION:
+            logger.info("No suitable selection (%d chars)", len(text))
+            return
+        changed = next_case(text)
+        if changed == text:
+            logger.info("Selection has no letters")
+            return
+        # The current layout first; otherwise one in which the text can be typed.
+        order = [self.current] + [i for i in range(len(self.layouts)) if i != self.current]
+        for index in order:
+            layout = self.layouts[index]
+            strokes = plan_typing(changed, layout_chars(layout.name, layout.variant))
+            if strokes is not None:
+                break
+        else:
+            logger.info("Selection cannot be typed in any layout")
+            return
+        logger.info("Changing the case of %d selected chars", len(changed))
+        self._on_convert()
+        self._switch_to(index)
+        self._typer.type(strokes)
+        # Select the text again, so that the next press goes on with the cycle.
+        self._typer.select_back(len(changed))
         self.buffer.reset()

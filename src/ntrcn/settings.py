@@ -206,7 +206,11 @@ class SettingsDialog(QDialog):
     # --- General ---------------------------------------------------------------------
 
     def _general_page(self) -> QWidget:
-        self._shortcut_labels = {"fix-typed": QLabel(), "fix-selection": QLabel()}
+        self._shortcut_labels = {
+            "fix-typed": QLabel(),
+            "fix-selection": QLabel(),
+            "change-case": QLabel(),
+        }
         configure = QPushButton(QIcon.fromTheme("configure-shortcuts"), _("Configure Shortcuts…"))
         configure.clicked.connect(open_shortcut_settings)
         self._sound = self._choice(SOUND_MODES, "sound")
@@ -228,6 +232,7 @@ class SettingsDialog(QDialog):
         form = _form()
         form.addRow(_("Fix typed text:"), self._shortcut_labels["fix-typed"])
         form.addRow(_("Fix selected text:"), self._shortcut_labels["fix-selection"])
+        form.addRow(_("Change case of selection:"), self._shortcut_labels["change-case"])
         form.addRow("", _left(configure))
         form.addRow(_("Sound when fixing:"), _left(self._sound, self._sound_file, self._listen))
         form.addRow("", self._sound_note)

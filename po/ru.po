@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ntrcn\n"
 "Report-Msgid-Bugs-To: https://github.com/DayDve/ntrcn/issues\n"
-"POT-Creation-Date: 2026-10-20 09:18+0300\n"
+"POT-Creation-Date: 2026-10-20 15:21+0300\n"
 "PO-Revision-Date: 2026-10-20 01:30+0300\n"
 "Last-Translator: DayDve <daydve@smbit.pro>\n"
 "Language-Team: Russian\n"
@@ -13,13 +13,17 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/ntrcn/app.py:76
+#: src/ntrcn/app.py:77
 msgid "Fix typed text"
 msgstr "Исправить набранное"
 
-#: src/ntrcn/app.py:77
+#: src/ntrcn/app.py:78
 msgid "Fix selected text"
 msgstr "Исправить выделенное"
+
+#: src/ntrcn/app.py:79
+msgid "Change case of selected text"
+msgstr "Сменить регистр выделенного текста"
 
 #: src/ntrcn/config.py:20
 msgid "Flag"
@@ -155,80 +159,84 @@ msgstr "Не удалось сохранить словарь: {error}"
 msgid "ntrcn Settings"
 msgstr "Настройки ntrcn"
 
-#: src/ntrcn/settings.py:172 src/ntrcn/settings.py:235
+#: src/ntrcn/settings.py:172 src/ntrcn/settings.py:240
 msgid "General"
 msgstr "Основные"
 
-#: src/ntrcn/settings.py:173 src/ntrcn/settings.py:302
+#: src/ntrcn/settings.py:173 src/ntrcn/settings.py:307
 msgid "Indicator"
 msgstr "Индикатор"
 
-#: src/ntrcn/settings.py:174 src/ntrcn/settings.py:354
+#: src/ntrcn/settings.py:174 src/ntrcn/settings.py:359
 msgid "Diagnostics"
 msgstr "Диагностика"
 
-#: src/ntrcn/settings.py:175 src/ntrcn/settings.py:420
+#: src/ntrcn/settings.py:175 src/ntrcn/settings.py:425
 msgid "About"
 msgstr "О программе"
 
-#: src/ntrcn/settings.py:210
+#: src/ntrcn/settings.py:214
 msgid "Configure Shortcuts…"
 msgstr "Настроить комбинации клавиш…"
 
-#: src/ntrcn/settings.py:216
+#: src/ntrcn/settings.py:220
 msgid "Listen"
 msgstr "Прослушать"
 
-#: src/ntrcn/settings.py:219
+#: src/ntrcn/settings.py:223
 #, python-brace-format
 msgid "Sounds longer than {seconds} seconds are cut off."
 msgstr "Звук длиннее {seconds} секунд обрывается."
 
-#: src/ntrcn/settings.py:224
+#: src/ntrcn/settings.py:228
 msgid "Start when I log in"
 msgstr "Запускать при входе в систему"
 
-#: src/ntrcn/settings.py:229
+#: src/ntrcn/settings.py:233
 msgid "Fix typed text:"
 msgstr "Исправить набранное:"
 
-#: src/ntrcn/settings.py:230
+#: src/ntrcn/settings.py:234
 msgid "Fix selected text:"
 msgstr "Исправить выделенное:"
 
-#: src/ntrcn/settings.py:232
+#: src/ntrcn/settings.py:235
+msgid "Change case of selection:"
+msgstr "Сменить регистр выделенного:"
+
+#: src/ntrcn/settings.py:237
 msgid "Sound when fixing:"
 msgstr "Звук при исправлении:"
 
-#: src/ntrcn/settings.py:234
+#: src/ntrcn/settings.py:239
 msgid "Autostart:"
 msgstr "Автозапуск:"
 
-#: src/ntrcn/settings.py:239
+#: src/ntrcn/settings.py:244
 msgid "Not set"
 msgstr "Не назначено"
 
-#: src/ntrcn/settings.py:246
+#: src/ntrcn/settings.py:251
 msgid "Choose File…"
 msgstr "Выбрать файл…"
 
-#: src/ntrcn/settings.py:253
+#: src/ntrcn/settings.py:258
 msgid "Sound when fixing"
 msgstr "Звук при исправлении"
 
-#: src/ntrcn/settings.py:253
+#: src/ntrcn/settings.py:258
 msgid "Sounds (*.oga *.ogg *.wav *.flac)"
 msgstr "Звуки (*.oga *.ogg *.wav *.flac)"
 
-#: src/ntrcn/settings.py:272
+#: src/ntrcn/settings.py:277
 msgid "Tray indicator:"
 msgstr "Индикатор в системном трее:"
 
-#: src/ntrcn/settings.py:273 src/ntrcn/settings.py:274
+#: src/ntrcn/settings.py:278 src/ntrcn/settings.py:279
 msgid "Icon theme:"
 msgstr "Тема значка:"
 
-#: src/ntrcn/settings.py:277
+#: src/ntrcn/settings.py:282
 msgid ""
 "Without the indicator, open the settings by starting ntrcn again from the "
 "application menu or with “Settings” in the context menu of its entry."
@@ -236,7 +244,7 @@ msgstr ""
 "Без индикатора настройки открываются повторным запуском ntrcn из меню "
 "приложений или пунктом «Настройки» в контекстном меню его ярлыка."
 
-#: src/ntrcn/settings.py:294
+#: src/ntrcn/settings.py:299
 msgid ""
 "A layout's picture is the file <code>&lt;layout&gt;.svg</code> or <code>."
 "png</code> in the flags folder, for example <code>de.png</code>. Files there "
@@ -246,68 +254,68 @@ msgstr ""
 "code> в папке флагов, например <code>de.png</code>. Файлы оттуда "
 "подхватываются сразу."
 
-#: src/ntrcn/settings.py:299
+#: src/ntrcn/settings.py:304
 msgid "Open Flags Folder"
 msgstr "Открыть папку с флагами"
 
-#: src/ntrcn/settings.py:305
+#: src/ntrcn/settings.py:310
 msgid "Layout flags"
 msgstr "Флаги раскладок"
 
-#: src/ntrcn/settings.py:320
+#: src/ntrcn/settings.py:325
 msgid "Choose Picture…"
 msgstr "Выбрать картинку…"
 
-#: src/ntrcn/settings.py:322
+#: src/ntrcn/settings.py:327
 msgid "Reset"
 msgstr "Сбросить"
 
-#: src/ntrcn/settings.py:332
+#: src/ntrcn/settings.py:337
 #, python-brace-format
 msgid "Picture for the {layout} layout"
 msgstr "Картинка для раскладки {layout}"
 
-#: src/ntrcn/settings.py:334
+#: src/ntrcn/settings.py:339
 msgid "Pictures (*.svg *.png)"
 msgstr "Картинки (*.svg *.png)"
 
-#: src/ntrcn/settings.py:352
+#: src/ntrcn/settings.py:357
 msgid "Check Again"
 msgstr "Проверить снова"
 
-#: src/ntrcn/settings.py:375
+#: src/ntrcn/settings.py:380
 msgid "Download Dictionary"
 msgstr "Скачать словарь"
 
-#: src/ntrcn/settings.py:384
+#: src/ntrcn/settings.py:389
 msgid "Downloading…"
 msgstr "Скачивание…"
 
-#: src/ntrcn/settings.py:399
+#: src/ntrcn/settings.py:404
 #, python-brace-format
 msgid "Version {version}"
 msgstr "Версия {version}"
 
-#: src/ntrcn/settings.py:404
+#: src/ntrcn/settings.py:409
 msgid ""
 "Fixes text typed in the wrong keyboard layout on KDE Plasma 6 (Wayland)."
 msgstr ""
 "Исправление текста, набранного в неправильной раскладке, для KDE Plasma 6 "
 "(Wayland)."
 
-#: src/ntrcn/settings.py:409
+#: src/ntrcn/settings.py:414
 msgid "Website:"
 msgstr "Сайт:"
 
-#: src/ntrcn/settings.py:410
+#: src/ntrcn/settings.py:415
 msgid "License:"
 msgstr "Лицензия:"
 
-#: src/ntrcn/settings.py:411
+#: src/ntrcn/settings.py:416
 msgid "Flags:"
 msgstr "Флаги:"
 
-#: src/ntrcn/settings.py:413
+#: src/ntrcn/settings.py:418
 msgid "Dictionaries:"
 msgstr "Словари:"
 

@@ -156,3 +156,25 @@ def plan_retype(
         if best is None or score > best_score:
             best, best_score = Retype(source, target, strokes), score
     return best
+
+
+def plan_typing(text: str, chars: LayoutChars) -> list[Keystroke] | None:
+    """Keys that type ``text`` in one layout, or ``None`` if some character is not in it."""
+    return _strokes(text, chars, chars)
+
+
+# --- Case ----------------------------------------------------------------------------------
+
+_WORD = re.compile(r"\w+")
+
+
+def _title(text: str) -> str:
+    return _WORD.sub(lambda word: word[0][:1].upper() + word[0][1:].lower(), text)
+
+
+def next_case(text: str) -> str:
+    """Cycle the case: lower → UPPER → Title → lower; mixed case goes to lower first."""
+    forms = list(dict.fromkeys([text.lower(), text.upper(), _title(text)]))
+    if text in forms:
+        return forms[(forms.index(text) + 1) % len(forms)]
+    return text.lower()

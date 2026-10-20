@@ -3,8 +3,10 @@ import pytest
 from ntrcn.convert import (
     NEWLINE,
     detect_source,
+    next_case,
     next_layout,
     plan_retype,
+    plan_typing,
     retyped_text,
     wrong_fragment,
 )
@@ -130,3 +132,29 @@ def test_selection_source_chosen_by_dictionaries(us_ru: list) -> None:
     plan = plan_retype("руддщ", us_ru, [ENGLISH.__contains__, RUSSIAN.__contains__])
     assert plan is not None and (plan.source, plan.target) == (1, 0)
     assert retyped_text(plan.strokes, us_ru[0]) == "hello"
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("привет мир", "ПРИВЕТ МИР"),
+        ("ПРИВЕТ МИР", "Привет Мир"),
+        ("Привет Мир", "привет мир"),
+        ("пРИВЕТ", "привет"),  # mixed case starts the cycle over
+        ("a", "A"),
+        ("A", "a"),  # upper and title are the same: no getting stuck
+        ("don't stop", "DON'T STOP"),
+    ],
+)
+def test_next_case_cycles(text: str, expected: str) -> None:
+    assert next_case(text) == expected
+
+
+def test_next_case_without_letters_is_unchanged() -> None:
+    assert next_case("123 !") == "123 !"
+
+
+def test_plan_typing_in_one_layout(us_ru: list) -> None:
+    strokes = plan_typing("Привет", us_ru[1])
+    assert strokes is not None and retyped_text(strokes, us_ru[1]) == "Привет"
+    assert plan_typing("Привет", us_ru[0]) is None
