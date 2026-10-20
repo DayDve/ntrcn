@@ -76,6 +76,11 @@ application menu, or run `ntrcn --settings`. Changes apply immediately and are s
 Custom flag pictures go to `~/.config/ntrcn/flags/<layout>.svg` or `.png` (for example
 `de.png`) and are picked up right away.
 
+Layout names in the tooltip and the menu come translated from xkeyboard-config. On Ubuntu and
+KDE neon the translations are part of the language pack, for example
+`sudo apt install language-pack-ru-base`; Debian ships them in `xkb-data`. Restart ntrcn after
+installing it; Plasma's own layout pop-up picks them up after you log in again.
+
 ## Dictionaries
 
 The language of each layout comes from the XKB registry; dictionaries are looked up in
