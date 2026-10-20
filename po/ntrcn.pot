@@ -1,0 +1,315 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the ntrcn package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ntrcn\n"
+"Report-Msgid-Bugs-To: https://github.com/DayDve/ntrcn/issues\n"
+"POT-Creation-Date: 2026-10-20 06:02+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/ntrcn/config.py:20
+msgid "Flag"
+msgstr ""
+
+#: src/ntrcn/config.py:21
+msgid "Text"
+msgstr ""
+
+#: src/ntrcn/config.py:22
+msgid "Flag and text"
+msgstr ""
+
+#: src/ntrcn/config.py:23
+msgid "App icon"
+msgstr ""
+
+#: src/ntrcn/config.py:24
+msgid "No indicator"
+msgstr ""
+
+#: src/ntrcn/config.py:27
+msgid "Custom sound"
+msgstr ""
+
+#: src/ntrcn/config.py:27
+msgid "Off"
+msgstr ""
+
+#: src/ntrcn/config.py:27
+msgid "On"
+msgstr ""
+
+#: src/ntrcn/config.py:29
+msgid "Dark"
+msgstr ""
+
+#: src/ntrcn/config.py:29
+msgid "Light"
+msgstr ""
+
+#: src/ntrcn/config.py:30
+msgid "Colour"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:44
+#, python-brace-format
+msgid "Dictionary for {label} ({name})"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:48
+msgid "The layout's language is unknown: only the last word is fixed"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:52
+#, python-brace-format
+msgid ""
+"Without a dictionary only the last word is fixed. Download it or install a "
+"package: {hint}"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:60
+msgid "Install the wl-clipboard package"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:63
+msgid "Reading keyboards"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:65
+msgid ""
+"Add yourself to the input group and log in again: sudo usermod -aG input "
+"$USER"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:68
+msgid "Virtual keyboard (/dev/uinput)"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:71
+#, python-brace-format
+msgid ""
+"Allow access with the udev rule: sudo install -m 644 {rule} /etc/udev/rules."
+"d/ && sudo udevadm trigger /dev/uinput"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:76
+msgid "Reading the selection (wl-paste)"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:81
+#, python-brace-format
+msgid "Plasma layouts: {count}"
+msgstr ""
+
+#: src/ntrcn/diagnostics.py:83
+msgid "Add a second layout in System Settings → Keyboard → Layouts"
+msgstr ""
+
+#: src/ntrcn/distro.py:68
+#, python-brace-format
+msgid ""
+"Install a hunspell dictionary for “{language}” with your package manager"
+msgstr ""
+
+#: src/ntrcn/distro.py:73
+#, python-brace-format
+msgid "Install the {package} package from the AUR"
+msgstr ""
+
+#: src/ntrcn/download.py:80
+#, python-brace-format
+msgid "Could not download the dictionary: {error}"
+msgstr ""
+
+#: src/ntrcn/download.py:84
+msgid "Could not download the dictionary: the server sent something else"
+msgstr ""
+
+#: src/ntrcn/download.py:93
+#, python-brace-format
+msgid "Could not save the dictionary: {error}"
+msgstr ""
+
+#: src/ntrcn/settings.py:165
+msgid "ntrcn Settings"
+msgstr ""
+
+#: src/ntrcn/settings.py:182 src/ntrcn/settings.py:250
+msgid "General"
+msgstr ""
+
+#: src/ntrcn/settings.py:183 src/ntrcn/settings.py:336
+msgid "Indicator"
+msgstr ""
+
+#: src/ntrcn/settings.py:184 src/ntrcn/settings.py:388
+msgid "Diagnostics"
+msgstr ""
+
+#: src/ntrcn/settings.py:185 src/ntrcn/settings.py:454
+msgid "About"
+msgstr ""
+
+#: src/ntrcn/settings.py:230
+msgid "Listen"
+msgstr ""
+
+#: src/ntrcn/settings.py:233
+#, python-brace-format
+msgid "Sounds longer than {seconds} seconds are cut off."
+msgstr ""
+
+#: src/ntrcn/settings.py:238
+msgid "Start when I log in"
+msgstr ""
+
+#: src/ntrcn/settings.py:243
+msgid "Fix typed text:"
+msgstr ""
+
+#: src/ntrcn/settings.py:244
+msgid "Fix selected text:"
+msgstr ""
+
+#: src/ntrcn/settings.py:247
+msgid "Sound when fixing:"
+msgstr ""
+
+#: src/ntrcn/settings.py:249
+msgid "Autostart:"
+msgstr ""
+
+#: src/ntrcn/settings.py:256
+msgid "Change Key…"
+msgstr ""
+
+#: src/ntrcn/settings.py:261
+msgid "Press a key… (Esc to cancel)"
+msgstr ""
+
+#: src/ntrcn/settings.py:268
+#, python-brace-format
+msgid "{key} is needed for typing, choose another key"
+msgstr ""
+
+#: src/ntrcn/settings.py:280
+msgid "Choose File…"
+msgstr ""
+
+#: src/ntrcn/settings.py:287
+msgid "Sound when fixing"
+msgstr ""
+
+#: src/ntrcn/settings.py:287
+msgid "Sounds (*.oga *.ogg *.wav *.flac)"
+msgstr ""
+
+#: src/ntrcn/settings.py:306
+msgid "Tray indicator:"
+msgstr ""
+
+#: src/ntrcn/settings.py:307 src/ntrcn/settings.py:308
+msgid "Icon theme:"
+msgstr ""
+
+#: src/ntrcn/settings.py:311
+msgid ""
+"Without the indicator, open the settings by starting ntrcn again from the "
+"application menu or with “Settings” in the context menu of its entry."
+msgstr ""
+
+#: src/ntrcn/settings.py:328
+msgid ""
+"A layout's picture is the file <code>&lt;layout&gt;.svg</code> or <code>."
+"png</code> in the flags folder, for example <code>de.png</code>. Files there "
+"are picked up at once."
+msgstr ""
+
+#: src/ntrcn/settings.py:333
+msgid "Open Flags Folder"
+msgstr ""
+
+#: src/ntrcn/settings.py:339
+msgid "Layout flags"
+msgstr ""
+
+#: src/ntrcn/settings.py:354
+msgid "Choose Picture…"
+msgstr ""
+
+#: src/ntrcn/settings.py:356
+msgid "Reset"
+msgstr ""
+
+#: src/ntrcn/settings.py:366
+#, python-brace-format
+msgid "Picture for the {layout} layout"
+msgstr ""
+
+#: src/ntrcn/settings.py:368
+msgid "Pictures (*.svg *.png)"
+msgstr ""
+
+#: src/ntrcn/settings.py:386
+msgid "Check Again"
+msgstr ""
+
+#: src/ntrcn/settings.py:409
+msgid "Download Dictionary"
+msgstr ""
+
+#: src/ntrcn/settings.py:418
+msgid "Downloading…"
+msgstr ""
+
+#: src/ntrcn/settings.py:433
+#, python-brace-format
+msgid "Version {version}"
+msgstr ""
+
+#: src/ntrcn/settings.py:438
+msgid ""
+"Fixes text typed in the wrong keyboard layout on KDE Plasma 6 (Wayland)."
+msgstr ""
+
+#: src/ntrcn/settings.py:443
+msgid "Website:"
+msgstr ""
+
+#: src/ntrcn/settings.py:444
+msgid "License:"
+msgstr ""
+
+#: src/ntrcn/settings.py:445
+msgid "Flags:"
+msgstr ""
+
+#: src/ntrcn/settings.py:447
+msgid "Dictionaries:"
+msgstr ""
+
+#: src/ntrcn/tray.py:75
+msgid "Settings…"
+msgstr ""
+
+#: src/ntrcn/tray.py:76
+msgid "Keyboard Settings…"
+msgstr ""
+
+#: src/ntrcn/tray.py:78
+msgid "Quit"
+msgstr ""
+
+#: src/ntrcn/tray.py:89
+msgid "Keyboard Layout"
+msgstr ""

@@ -72,7 +72,7 @@ def test_tooltip_like_plasma_keyboard_widget(tray: tuple) -> None:
     item, _selected = tray
     item.update(LAYOUTS, 0)
     assert item._item.visible
-    assert item._item.tooltip == ("Раскладка клавиатуры", "English (US)")
+    assert item._item.tooltip == ("Keyboard Layout", "English (US)")
 
 
 @pytest.mark.usefixtures("qt_app")

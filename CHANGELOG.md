@@ -16,4 +16,5 @@ All notable changes to this project are documented in this file. The format is b
 - Tray indicator: flag, layout name, both, the app icon or none, with light and dark themes.
 - Settings: hotkey, sound, autostart, custom flag pictures, diagnostics with dictionary
   install hints and download.
+- Interface in English and Russian (gettext); more languages can be added in `po/`.
 - Debian package.

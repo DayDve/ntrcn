@@ -23,7 +23,15 @@ ntrcn = "ntrcn.app:main"
 
 [tool.setuptools.package-data]
 # Only what the program needs at run time, plus the attribution the flag license asks for.
-ntrcn = ["*.desktop", "*.rules", "icons/*.svg", "sounds/*.wav", "flags/sprite.svg", "flags/README.md"]
+ntrcn = [
+    "*.desktop",
+    "*.rules",
+    "icons/*.svg",
+    "sounds/*.wav",
+    "flags/sprite.svg",
+    "flags/README.md",
+    "locale/*/LC_MESSAGES/*.mo",
+]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

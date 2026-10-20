@@ -11,6 +11,7 @@ import evdev
 from evdev import ecodes as e
 
 from ntrcn.distro import distro_family, install_command, install_hint
+from ntrcn.i18n import _
 from ntrcn.layouts import Layout
 from ntrcn.spelling import find_dictionary, layout_language
 
@@ -40,39 +41,46 @@ def _readable_keyboards() -> int:
 
 
 def _dictionary_check(layout: Layout, family: str | None) -> Check:
-    title = f"Словарь для {layout.label} ({layout.name})"
+    title = _("Dictionary for {label} ({name})").format(label=layout.label, name=layout.name)
     language = layout_language(layout.name)
     if language is None:
-        return Check(title, False, "Язык раскладки неизвестен: исправляется только последнее слово")
+        return Check(
+            title, False, _("The layout's language is unknown: only the last word is fixed")
+        )
     found = find_dictionary(language, layout.name) is not None
-    hint = (
-        "Без словаря исправляется только последнее слово. "
-        f"Скачайте его или установите пакетом: {install_hint(language, family)}"
-    )
+    hint = _(
+        "Without a dictionary only the last word is fixed. Download it or install a package: {hint}"
+    ).format(hint=install_hint(language, family))
     return Check(f"{title}: {language}", found, hint, download=None if found else language)
 
 
 def run_checks(layouts: list[Layout]) -> list[Check]:
     """Run all checks for the layouts configured in Plasma."""
     family = distro_family()
-    wl_clipboard = install_command("wl-clipboard", family) or "установите пакет wl-clipboard"
+    wl_clipboard = install_command("wl-clipboard", family) or _("Install the wl-clipboard package")
     return [
         Check(
-            "Чтение клавиатур",
+            _("Reading keyboards"),
             _readable_keyboards() > 0,
-            "Добавьте себя в группу input и перезайдите: sudo usermod -aG input $USER",
+            _("Add yourself to the input group and log in again: sudo usermod -aG input $USER"),
         ),
         Check(
-            "Виртуальная клавиатура (/dev/uinput)",
+            _("Virtual keyboard (/dev/uinput)"),
             os.access("/dev/uinput", os.W_OK),
-            f"Разрешите доступ правилом udev: sudo install -m 644 {UDEV_RULE_FILE} "
-            "/etc/udev/rules.d/ && sudo udevadm trigger /dev/uinput",
+            _(
+                "Allow access with the udev rule: sudo install -m 644 {rule} "
+                "/etc/udev/rules.d/ && sudo udevadm trigger /dev/uinput"
+            ).format(rule=UDEV_RULE_FILE),
         ),
-        Check("Чтение выделения (wl-paste)", shutil.which("wl-paste") is not None, wl_clipboard),
         Check(
-            f"Раскладки Plasma: {len(layouts)}",
+            _("Reading the selection (wl-paste)"),
+            shutil.which("wl-paste") is not None,
+            wl_clipboard,
+        ),
+        Check(
+            _("Plasma layouts: {count}").format(count=len(layouts)),
             len(layouts) >= 2,
-            "Добавьте вторую раскладку в Параметрах системы → Клавиатура → Раскладки",
+            _("Add a second layout in System Settings → Keyboard → Layouts"),
         ),
         *(_dictionary_check(layout, family) for layout in layouts),
     ]

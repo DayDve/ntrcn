@@ -1,0 +1,325 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ntrcn\n"
+"Report-Msgid-Bugs-To: https://github.com/DayDve/ntrcn/issues\n"
+"POT-Creation-Date: 2026-10-20 06:02+0300\n"
+"PO-Revision-Date: 2026-10-20 01:30+0300\n"
+"Last-Translator: DayDve <daydve@smbit.pro>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: src/ntrcn/config.py:20
+msgid "Flag"
+msgstr "Флаг"
+
+#: src/ntrcn/config.py:21
+msgid "Text"
+msgstr "Текст"
+
+#: src/ntrcn/config.py:22
+msgid "Flag and text"
+msgstr "Флаг и текст"
+
+#: src/ntrcn/config.py:23
+msgid "App icon"
+msgstr "Значок программы"
+
+#: src/ntrcn/config.py:24
+msgid "No indicator"
+msgstr "Без индикатора"
+
+#: src/ntrcn/config.py:27
+msgid "Custom sound"
+msgstr "Свой звук"
+
+#: src/ntrcn/config.py:27
+msgid "Off"
+msgstr "Выкл"
+
+#: src/ntrcn/config.py:27
+msgid "On"
+msgstr "Вкл"
+
+#: src/ntrcn/config.py:29
+msgid "Dark"
+msgstr "Тёмная"
+
+#: src/ntrcn/config.py:29
+msgid "Light"
+msgstr "Светлая"
+
+#: src/ntrcn/config.py:30
+msgid "Colour"
+msgstr "Цветная"
+
+#: src/ntrcn/diagnostics.py:44
+#, python-brace-format
+msgid "Dictionary for {label} ({name})"
+msgstr "Словарь для {label} ({name})"
+
+#: src/ntrcn/diagnostics.py:48
+msgid "The layout's language is unknown: only the last word is fixed"
+msgstr "Язык раскладки неизвестен: исправляется только последнее слово"
+
+#: src/ntrcn/diagnostics.py:52
+#, python-brace-format
+msgid ""
+"Without a dictionary only the last word is fixed. Download it or install a "
+"package: {hint}"
+msgstr ""
+"Без словаря исправляется только последнее слово. Скачайте словарь или "
+"установите пакет: {hint}"
+
+#: src/ntrcn/diagnostics.py:60
+msgid "Install the wl-clipboard package"
+msgstr "Установите пакет wl-clipboard"
+
+#: src/ntrcn/diagnostics.py:63
+msgid "Reading keyboards"
+msgstr "Чтение клавиатур"
+
+#: src/ntrcn/diagnostics.py:65
+msgid ""
+"Add yourself to the input group and log in again: sudo usermod -aG input "
+"$USER"
+msgstr ""
+"Добавьте себя в группу input и перезайдите: sudo usermod -aG input $USER"
+
+#: src/ntrcn/diagnostics.py:68
+msgid "Virtual keyboard (/dev/uinput)"
+msgstr "Виртуальная клавиатура (/dev/uinput)"
+
+#: src/ntrcn/diagnostics.py:71
+#, python-brace-format
+msgid ""
+"Allow access with the udev rule: sudo install -m 644 {rule} /etc/udev/rules."
+"d/ && sudo udevadm trigger /dev/uinput"
+msgstr ""
+"Разрешите доступ правилом udev: sudo install -m 644 {rule} /etc/udev/rules."
+"d/ && sudo udevadm trigger /dev/uinput"
+
+#: src/ntrcn/diagnostics.py:76
+msgid "Reading the selection (wl-paste)"
+msgstr "Чтение выделения (wl-paste)"
+
+#: src/ntrcn/diagnostics.py:81
+#, python-brace-format
+msgid "Plasma layouts: {count}"
+msgstr "Раскладки Plasma: {count}"
+
+#: src/ntrcn/diagnostics.py:83
+msgid "Add a second layout in System Settings → Keyboard → Layouts"
+msgstr ""
+"Добавьте вторую раскладку в Параметрах системы → Клавиатура → Раскладки"
+
+#: src/ntrcn/distro.py:68
+#, python-brace-format
+msgid ""
+"Install a hunspell dictionary for “{language}” with your package manager"
+msgstr ""
+"Установите словарь hunspell для языка «{language}» через менеджер пакетов"
+
+#: src/ntrcn/distro.py:73
+#, python-brace-format
+msgid "Install the {package} package from the AUR"
+msgstr "Установите пакет {package} из AUR"
+
+#: src/ntrcn/download.py:80
+#, python-brace-format
+msgid "Could not download the dictionary: {error}"
+msgstr "Не удалось скачать словарь: {error}"
+
+#: src/ntrcn/download.py:84
+msgid "Could not download the dictionary: the server sent something else"
+msgstr "Не удалось скачать словарь: сервер прислал не словарь"
+
+#: src/ntrcn/download.py:93
+#, python-brace-format
+msgid "Could not save the dictionary: {error}"
+msgstr "Не удалось сохранить словарь: {error}"
+
+#: src/ntrcn/settings.py:165
+msgid "ntrcn Settings"
+msgstr "Настройки ntrcn"
+
+#: src/ntrcn/settings.py:182 src/ntrcn/settings.py:250
+msgid "General"
+msgstr "Основные"
+
+#: src/ntrcn/settings.py:183 src/ntrcn/settings.py:336
+msgid "Indicator"
+msgstr "Индикатор"
+
+#: src/ntrcn/settings.py:184 src/ntrcn/settings.py:388
+msgid "Diagnostics"
+msgstr "Диагностика"
+
+#: src/ntrcn/settings.py:185 src/ntrcn/settings.py:454
+msgid "About"
+msgstr "О программе"
+
+#: src/ntrcn/settings.py:230
+msgid "Listen"
+msgstr "Прослушать"
+
+#: src/ntrcn/settings.py:233
+#, python-brace-format
+msgid "Sounds longer than {seconds} seconds are cut off."
+msgstr "Звук длиннее {seconds} секунд обрывается."
+
+#: src/ntrcn/settings.py:238
+msgid "Start when I log in"
+msgstr "Запускать при входе в систему"
+
+#: src/ntrcn/settings.py:243
+msgid "Fix typed text:"
+msgstr "Исправить набранное:"
+
+#: src/ntrcn/settings.py:244
+msgid "Fix selected text:"
+msgstr "Исправить выделенное:"
+
+#: src/ntrcn/settings.py:247
+msgid "Sound when fixing:"
+msgstr "Звук при исправлении:"
+
+#: src/ntrcn/settings.py:249
+msgid "Autostart:"
+msgstr "Автозапуск:"
+
+#: src/ntrcn/settings.py:256
+msgid "Change Key…"
+msgstr "Изменить клавишу…"
+
+#: src/ntrcn/settings.py:261
+msgid "Press a key… (Esc to cancel)"
+msgstr "Нажмите клавишу… (Esc — отмена)"
+
+#: src/ntrcn/settings.py:268
+#, python-brace-format
+msgid "{key} is needed for typing, choose another key"
+msgstr "{key} нужна для набора текста, выберите другую"
+
+#: src/ntrcn/settings.py:280
+msgid "Choose File…"
+msgstr "Выбрать файл…"
+
+#: src/ntrcn/settings.py:287
+msgid "Sound when fixing"
+msgstr "Звук при исправлении"
+
+#: src/ntrcn/settings.py:287
+msgid "Sounds (*.oga *.ogg *.wav *.flac)"
+msgstr "Звуки (*.oga *.ogg *.wav *.flac)"
+
+#: src/ntrcn/settings.py:306
+msgid "Tray indicator:"
+msgstr "Индикатор в системном трее:"
+
+#: src/ntrcn/settings.py:307 src/ntrcn/settings.py:308
+msgid "Icon theme:"
+msgstr "Тема значка:"
+
+#: src/ntrcn/settings.py:311
+msgid ""
+"Without the indicator, open the settings by starting ntrcn again from the "
+"application menu or with “Settings” in the context menu of its entry."
+msgstr ""
+"Без индикатора настройки открываются повторным запуском ntrcn из меню "
+"приложений или пунктом «Настройки» в контекстном меню его ярлыка."
+
+#: src/ntrcn/settings.py:328
+msgid ""
+"A layout's picture is the file <code>&lt;layout&gt;.svg</code> or <code>."
+"png</code> in the flags folder, for example <code>de.png</code>. Files there "
+"are picked up at once."
+msgstr ""
+"Картинка раскладки — файл <code>&lt;раскладка&gt;.svg</code> или <code>.png</"
+"code> в папке флагов, например <code>de.png</code>. Файлы оттуда "
+"подхватываются сразу."
+
+#: src/ntrcn/settings.py:333
+msgid "Open Flags Folder"
+msgstr "Открыть папку с флагами"
+
+#: src/ntrcn/settings.py:339
+msgid "Layout flags"
+msgstr "Флаги раскладок"
+
+#: src/ntrcn/settings.py:354
+msgid "Choose Picture…"
+msgstr "Выбрать картинку…"
+
+#: src/ntrcn/settings.py:356
+msgid "Reset"
+msgstr "Сбросить"
+
+#: src/ntrcn/settings.py:366
+#, python-brace-format
+msgid "Picture for the {layout} layout"
+msgstr "Картинка для раскладки {layout}"
+
+#: src/ntrcn/settings.py:368
+msgid "Pictures (*.svg *.png)"
+msgstr "Картинки (*.svg *.png)"
+
+#: src/ntrcn/settings.py:386
+msgid "Check Again"
+msgstr "Проверить снова"
+
+#: src/ntrcn/settings.py:409
+msgid "Download Dictionary"
+msgstr "Скачать словарь"
+
+#: src/ntrcn/settings.py:418
+msgid "Downloading…"
+msgstr "Скачивание…"
+
+#: src/ntrcn/settings.py:433
+#, python-brace-format
+msgid "Version {version}"
+msgstr "Версия {version}"
+
+#: src/ntrcn/settings.py:438
+msgid ""
+"Fixes text typed in the wrong keyboard layout on KDE Plasma 6 (Wayland)."
+msgstr ""
+"Исправление текста, набранного в неправильной раскладке, для KDE Plasma 6 "
+"(Wayland)."
+
+#: src/ntrcn/settings.py:443
+msgid "Website:"
+msgstr "Сайт:"
+
+#: src/ntrcn/settings.py:444
+msgid "License:"
+msgstr "Лицензия:"
+
+#: src/ntrcn/settings.py:445
+msgid "Flags:"
+msgstr "Флаги:"
+
+#: src/ntrcn/settings.py:447
+msgid "Dictionaries:"
+msgstr "Словари:"
+
+#: src/ntrcn/tray.py:75
+msgid "Settings…"
+msgstr "Настройки…"
+
+#: src/ntrcn/tray.py:76
+msgid "Keyboard Settings…"
+msgstr "Параметры клавиатуры…"
+
+#: src/ntrcn/tray.py:78
+msgid "Quit"
+msgstr "Выход"
+
+#: src/ntrcn/tray.py:89
+msgid "Keyboard Layout"
+msgstr "Раскладка клавиатуры"

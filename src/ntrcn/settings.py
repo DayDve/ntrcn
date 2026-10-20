@@ -40,6 +40,7 @@ from ntrcn.flags import (
     remove_custom_flag,
     set_custom_flag,
 )
+from ntrcn.i18n import _
 from ntrcn.keys import CHAR_KEYS, key_name
 from ntrcn.layouts import Layout
 from ntrcn.sound import MAX_SECONDS, chosen_sound, play
@@ -161,7 +162,7 @@ class SettingsDialog(QDialog):
         self._on_change = on_change
         self._capture_key = capture_key
         self._downloader = DictionaryDownloader()
-        self.setWindowTitle("Настройки ntrcn")
+        self.setWindowTitle(_("ntrcn Settings"))
         self.setWindowIcon(app_icon())
         self.resize(860, 560)
 
@@ -178,10 +179,10 @@ class SettingsDialog(QDialog):
         sidebar.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         sidebar.setFrameShape(QFrame.Shape.NoFrame)
         for icon, title, page in (
-            ("preferences-desktop-keyboard", "Основные", self._general_page()),
-            ("preferences-desktop-plasma", "Индикатор", self._indicator_page()),
-            ("preferences-smart-status", "Диагностика", self._diagnostics_page()),
-            ("help-about", "О программе", self._about_page()),
+            ("preferences-desktop-keyboard", _("General"), self._general_page()),
+            ("preferences-desktop-plasma", _("Indicator"), self._indicator_page()),
+            ("preferences-smart-status", _("Diagnostics"), self._diagnostics_page()),
+            ("help-about", _("About"), self._about_page()),
         ):
             item = QListWidgetItem(QIcon.fromTheme(icon), title, sidebar)
             item.setTextAlignment(Qt.AlignmentFlag.AlignHCenter)
@@ -207,7 +208,7 @@ class SettingsDialog(QDialog):
         """A list of ``options`` (key -> title) bound to the setting with that name."""
         box = QComboBox()
         for key, title in options.items():
-            box.addItem(title, key)
+            box.addItem(_(title), key)
         box.setCurrentIndex(max(box.findData(getattr(self._config, setting)), 0))
         box.currentIndexChanged.connect(lambda _: self._change(**{setting: box.currentData()}))
         return box
@@ -226,43 +227,47 @@ class SettingsDialog(QDialog):
         self._sound_file = QPushButton(QIcon.fromTheme("document-open"), "")
         self._sound_file.clicked.connect(self._choose_sound_file)
         self._listen = QPushButton(QIcon.fromTheme("media-playback-start"), "")
-        self._listen.setToolTip("Прослушать")
+        self._listen.setToolTip(_("Listen"))
         self._listen.clicked.connect(self._play_sound)
-        self._sound_note = _note(f"Звук длиннее {MAX_SECONDS} секунд обрывается.")
+        self._sound_note = _note(
+            _("Sounds longer than {seconds} seconds are cut off.").format(seconds=MAX_SECONDS)
+        )
         self._sound_note.setWordWrap(False)
         self._sound.currentIndexChanged.connect(self._show_sound_controls)
         self._show_sound_controls()
-        start = QCheckBox("Запускать при входе в систему")
+        start = QCheckBox(_("Start when I log in"))
         start.setChecked(autostart.is_enabled())
         start.toggled.connect(autostart.set_enabled)
 
         form = _form()
-        form.addRow("Исправить набранное:", self._word_hotkey)
-        form.addRow("Исправить выделенное:", self._selection_hotkey)
+        form.addRow(_("Fix typed text:"), self._word_hotkey)
+        form.addRow(_("Fix selected text:"), self._selection_hotkey)
         form.addRow("", self._hotkey_button)
         form.addRow("", self._hotkey_error)
-        form.addRow("Звук при исправлении:", _left(self._sound, self._sound_file, self._listen))
+        form.addRow(_("Sound when fixing:"), _left(self._sound, self._sound_file, self._listen))
         form.addRow("", self._sound_note)
-        form.addRow("Автозапуск:", start)
-        return _page("Основные", form)
+        form.addRow(_("Autostart:"), start)
+        return _page(_("General"), form)
 
     def _show_hotkey(self) -> None:
         title = _key_title(self._config.hotkey)
         self._word_hotkey.setText(f"<b>{title}</b>")
         self._selection_hotkey.setText(f"<b>Shift+{title}</b>")
-        self._hotkey_button.setText("Изменить клавишу…")
+        self._hotkey_button.setText(_("Change Key…"))
         self._hotkey_button.setEnabled(True)
 
     def _start_hotkey_capture(self) -> None:
         self._hotkey_error.clear()
-        self._hotkey_button.setText("Нажмите клавишу… (Esc — отмена)")
+        self._hotkey_button.setText(_("Press a key… (Esc to cancel)"))
         self._hotkey_button.setEnabled(False)
         self._capture_key(self._on_key_captured)
 
     def _on_key_captured(self, code: int) -> None:
         if code in _TYPING_KEYS:
             self._hotkey_error.setText(
-                f"{_key_title(key_name(code))} нужна для набора текста, выберите другую"
+                _("{key} is needed for typing, choose another key").format(
+                    key=_key_title(key_name(code))
+                )
             )
         elif code != e.KEY_ESC:  # Esc cancels
             self._change(hotkey=key_name(code))
@@ -272,14 +277,14 @@ class SettingsDialog(QDialog):
         custom = self._config.sound == "custom"
         self._sound_file.setVisible(custom)
         self._sound_note.setVisible(custom)
-        self._sound_file.setText(Path(self._config.sound_file).name or "Выбрать файл…")
+        self._sound_file.setText(Path(self._config.sound_file).name or _("Choose File…"))
         self._listen.setEnabled(
             chosen_sound(self._config.sound, self._config.sound_file) is not None
         )
 
     def _choose_sound_file(self) -> None:
-        path, _ = QFileDialog.getOpenFileName(
-            self, "Звук при исправлении", str(Path.home()), "Звуки (*.oga *.ogg *.wav *.flac)"
+        path, _filter = QFileDialog.getOpenFileName(
+            self, _("Sound when fixing"), str(Path.home()), _("Sounds (*.oga *.ogg *.wav *.flac)")
         )
         if path:
             self._change(sound_file=path)
@@ -298,12 +303,14 @@ class SettingsDialog(QDialog):
         text_theme = self._choice(TEXT_THEMES, "text_theme")
         app_icon_theme = self._choice(APP_ICON_THEMES, "app_icon_theme")
         self._indicator_form = form = _form()
-        form.addRow("Индикатор в системном трее:", indicator)
-        form.addRow("Тема значка:", text_theme)
-        form.addRow("Тема значка:", app_icon_theme)
+        form.addRow(_("Tray indicator:"), indicator)
+        form.addRow(_("Icon theme:"), text_theme)
+        form.addRow(_("Icon theme:"), app_icon_theme)
         hint = _note(
-            "Без индикатора настройки открываются повторным запуском ntrcn из меню приложений "
-            "или пунктом «Настройки» в контекстном меню его ярлыка."
+            _(
+                "Without the indicator, open the settings by starting ntrcn again from the "
+                "application menu or with “Settings” in the context menu of its entry."
+            )
         )
 
         def show_relevant_rows() -> None:
@@ -317,17 +324,19 @@ class SettingsDialog(QDialog):
 
         self._flags_form = _form()
         custom = _note(
-            "Картинка раскладки — файл <code>&lt;раскладка&gt;.svg</code> или "
-            "<code>.png</code> в папке флагов, например <code>de.png</code>. "
-            "Файлы оттуда подхватываются сразу."
+            _(
+                "A layout's picture is the file <code>&lt;layout&gt;.svg</code> or "
+                "<code>.png</code> in the flags folder, for example <code>de.png</code>. "
+                "Files there are picked up at once."
+            )
         )
-        open_folder = QPushButton(QIcon.fromTheme("folder-open"), "Открыть папку с флагами")
+        open_folder = QPushButton(QIcon.fromTheme("folder-open"), _("Open Flags Folder"))
         open_folder.clicked.connect(_open_flags_folder)
         return _page(
-            "Индикатор",
+            _("Indicator"),
             form,
             hint,
-            _section("Флаги раскладок"),
+            _section(_("Layout flags")),
             self._flags_form,
             custom,
             _left(open_folder),
@@ -342,9 +351,9 @@ class SettingsDialog(QDialog):
             preview.setPixmap(
                 layout_icon(layout.name, layout.label, "flag").pixmap(_FLAG_ICON_SIZE)
             )
-            choose = QPushButton(QIcon.fromTheme("document-open"), "Выбрать картинку…")
+            choose = QPushButton(QIcon.fromTheme("document-open"), _("Choose Picture…"))
             choose.clicked.connect(lambda _=False, name=layout.name: self._choose_flag(name))
-            reset = QPushButton(QIcon.fromTheme("edit-undo"), "Сбросить")
+            reset = QPushButton(QIcon.fromTheme("edit-undo"), _("Reset"))
             reset.setEnabled(custom_flag(layout.name) is not None)
             reset.clicked.connect(lambda _=False, name=layout.name: self._reset_flag(name))
             self._flags_form.addRow(
@@ -352,11 +361,11 @@ class SettingsDialog(QDialog):
             )
 
     def _choose_flag(self, layout_name: str) -> None:
-        path, _ = QFileDialog.getOpenFileName(
+        path, _filter = QFileDialog.getOpenFileName(
             self,
-            f"Картинка для раскладки {layout_name}",
+            _("Picture for the {layout} layout").format(layout=layout_name),
             str(Path.home()),
-            "Картинки (*.svg *.png)",
+            _("Pictures (*.svg *.png)"),
         )
         if path:
             set_custom_flag(layout_name, Path(path))
@@ -374,9 +383,9 @@ class SettingsDialog(QDialog):
         self._download_error = QLabel()
         self._download_error.setStyleSheet("color: #da4453")
         self._download_error.setWordWrap(True)
-        again = QPushButton(QIcon.fromTheme("view-refresh"), "Проверить снова")
+        again = QPushButton(QIcon.fromTheme("view-refresh"), _("Check Again"))
         again.clicked.connect(self._recheck)
-        return _page("Диагностика", self._checks, self._download_error, _left(again))
+        return _page(_("Diagnostics"), self._checks, self._download_error, _left(again))
 
     def _recheck(self) -> None:
         """Check again, picking up dictionaries installed meanwhile."""
@@ -397,7 +406,7 @@ class SettingsDialog(QDialog):
             row.addWidget(label, 1)
             self._checks.addLayout(row)
             if check.download:
-                button = QPushButton(QIcon.fromTheme("download"), "Скачать словарь")
+                button = QPushButton(QIcon.fromTheme("download"), _("Download Dictionary"))
                 button.clicked.connect(
                     lambda _=False, lang=check.download, b=button: self._download(lang, b)
                 )
@@ -406,7 +415,7 @@ class SettingsDialog(QDialog):
     def _download(self, language: str, button: QPushButton) -> None:
         self._download_error.clear()
         button.setEnabled(False)
-        button.setText("Скачивание…")
+        button.setText(_("Downloading…"))
         self._downloader.download(language, self._on_downloaded)
 
     def _on_downloaded(self, error: str | None) -> None:
@@ -420,28 +429,29 @@ class SettingsDialog(QDialog):
         icon = QLabel()
         icon.setPixmap(app_icon().pixmap(96))
         name = QLabel(
-            f"<span style='font-size: 20pt; font-weight: 600'>ntrcn</span><br>Версия {__version__}"
+            "<span style='font-size: 20pt; font-weight: 600'>ntrcn</span><br>"
+            + _("Version {version}").format(version=__version__)
         )
         header = _left(icon, name)
         header.setSpacing(16)
         description = QLabel(
-            "Исправляет текст, набранный не в той раскладке, в KDE Plasma 6 на Wayland."
+            _("Fixes text typed in the wrong keyboard layout on KDE Plasma 6 (Wayland).")
         )
         description.setWordWrap(True)
         form = _form()
         for title, html in (
-            ("Сайт:", f"<a href='{REPO_URL}'>{REPO_URL.removeprefix('https://')}</a>"),
-            ("Лицензия:", "MIT"),
-            ("Флаги:", "<a href='https://vlags.com'>vlags.com</a>"),
+            (_("Website:"), f"<a href='{REPO_URL}'>{REPO_URL.removeprefix('https://')}</a>"),
+            (_("License:"), "MIT"),
+            (_("Flags:"), "<a href='https://vlags.com'>vlags.com</a>"),
             (
-                "Словари:",
+                _("Dictionaries:"),
                 "<a href='https://github.com/LibreOffice/dictionaries'>LibreOffice</a>",
             ),
         ):
             value = QLabel(html)
             value.setOpenExternalLinks(True)
             form.addRow(title, value)
-        return _page("О программе", header, description, form)
+        return _page(_("About"), header, description, form)
 
     # --- Window events ---------------------------------------------------------------
 
