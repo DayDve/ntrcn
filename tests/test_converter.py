@@ -53,8 +53,14 @@ def setup() -> tuple[Converter, FakeKde, FakeTyper]:
 
 
 def press(converter: Converter, *codes: int, held: set[int] | None = None) -> None:
+    """Press keys; Pause also fires the global shortcut, as KWin does after the key event."""
     for code in codes:
         converter.on_key_press(code, held or set())
+        if code == e.KEY_PAUSE:
+            if held and e.KEY_LEFTSHIFT in held:
+                converter.fix_selection()
+            else:
+                converter.fix_typed()
 
 
 def test_pause_retypes_last_word_in_next_layout(setup: Any) -> None:
@@ -120,20 +126,12 @@ def test_on_convert_fires_before_retyping_and_only_then(
     assert typer.log == ["sound", ("erase", 1), ("type", [e.KEY_G])]
 
 
-def test_key_capture_takes_next_non_modifier_key(setup: Any) -> None:
-    converter, _kde, typer = setup
-    captured: list[int] = []
-    converter.key_capture = captured.append
-    press(converter, e.KEY_LEFTSHIFT, e.KEY_F13, e.KEY_G)
-    assert captured == [e.KEY_F13]
-    assert converter.key_capture is None
-    assert len(converter.buffer) == 1  # later keys are handled normally again
-
-
-def test_hotkey_can_be_changed(setup: Any) -> None:
+def test_shortcut_with_modifiers_still_finds_the_typed_text(setup: Any) -> None:
+    # Ctrl+Alt+X resets the buffer as a shortcut a moment before KDE reports it.
     converter, kde, typer = setup
-    converter.hotkey = e.KEY_F13
-    press(converter, e.KEY_G, e.KEY_F13)
+    press(converter, e.KEY_G)
+    converter.on_key_press(e.KEY_X, {e.KEY_LEFTCTRL, e.KEY_LEFTALT})
+    converter.fix_typed()
     assert kde.index == 1
     assert typer.log == [("erase", 1), ("type", [e.KEY_G])]
 

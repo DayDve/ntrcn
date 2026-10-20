@@ -34,7 +34,6 @@ APP_ICON_THEMES = {"color": N_("Colour"), **TEXT_THEMES}
 class Config:
     """All ntrcn settings with their defaults."""
 
-    hotkey: str = "PAUSE"  # evdev key name without the KEY_ prefix
     sound: str = "off"  # one of SOUND_MODES
     sound_file: str = ""  # the user's own sound, for "custom"
     tray_indicator: str = "flag"  # one of TRAY_INDICATORS

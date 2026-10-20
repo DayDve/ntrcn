@@ -19,7 +19,7 @@ typing. Works in any application, terminals included, and with any number of lay
 - <kbd>Shift</kbd>+<kbd>Pause</kbd> retypes the selected text.
 - With three or more layouts, the dictionaries pick the right target layout.
 - Tray indicator: flag, layout name, both, the app icon, or nothing.
-- Optional sound, configurable hotkey, autostart, a diagnostics page.
+- Optional sound, autostart, a diagnostics page.
 - Interface in English and Russian; translations are welcome (see
   [CONTRIBUTING.md](CONTRIBUTING.md)).
 
@@ -63,7 +63,9 @@ make install-user   # ~/.local/bin/ntrcn, menu entry, autostart
 | <kbd>Pause</kbd> again | Same text in the next layout |
 | <kbd>Shift</kbd>+<kbd>Pause</kbd> | Retype the selection |
 
-Left-click the tray indicator to switch layouts; its menu opens the settings.
+These are the default shortcuts; change them in System Settings → Keyboard → Shortcuts →
+ntrcn, like those of any KDE application. Left-click the tray indicator to switch layouts, or
+scroll over it; its menu opens the settings.
 
 ## Configuration
 

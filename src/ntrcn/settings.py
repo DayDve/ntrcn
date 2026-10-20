@@ -6,9 +6,8 @@ from collections.abc import Callable
 from dataclasses import replace
 from pathlib import Path
 
-from evdev import ecodes as e
 from PySide6.QtCore import QSize, Qt, QUrl
-from PySide6.QtGui import QCloseEvent, QDesktopServices, QHideEvent, QIcon, QShowEvent
+from PySide6.QtGui import QCloseEvent, QDesktopServices, QIcon, QShowEvent
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -41,29 +40,21 @@ from ntrcn.flags import (
     set_custom_flag,
 )
 from ntrcn.i18n import _
-from ntrcn.keys import CHAR_KEYS, key_name
 from ntrcn.layouts import Layout
+from ntrcn.shortcuts import open_shortcut_settings
 from ntrcn.sound import MAX_SECONDS, chosen_sound, play
 from ntrcn.spelling import forget_dictionaries
 
 REPO_URL = "https://github.com/DayDve/ntrcn"
-# Keys that are needed for typing and editing, so they cannot be the hotkey.
-_TYPING_KEYS = CHAR_KEYS | {e.KEY_BACKSPACE, e.KEY_ENTER, e.KEY_TAB}
 _FLAG_ICON_SIZE = QSize(32, 32)
 _SIDEBAR_ICON_SIZE = QSize(48, 48)
 _SIDEBAR_ITEM_SIZE = QSize(116, 84)
 _PAGE_WIDTH = 560
 
-KeyCapture = Callable[[Callable[[int], None] | None], None]
-
 
 def _open_flags_folder() -> None:
     USER_FLAGS_DIR.mkdir(parents=True, exist_ok=True)
     QDesktopServices.openUrl(QUrl.fromLocalFile(str(USER_FLAGS_DIR)))
-
-
-def _key_title(name: str) -> str:
-    return name.replace("_", " ").title()
 
 
 def _page(title: str, *items: QWidget | QLayout) -> QScrollArea:
@@ -145,7 +136,7 @@ class SettingsDialog(QDialog):
         config: Config,
         layouts: Callable[[], list[Layout]],
         on_change: Callable[[Config], None],
-        capture_key: KeyCapture,
+        shortcut_text: Callable[[str], str],
     ) -> None:
         """Build the window.
 
@@ -153,14 +144,13 @@ class SettingsDialog(QDialog):
             config: Current settings.
             layouts: Returns the layouts currently configured in Plasma.
             on_change: Receives the new settings after every change.
-            capture_key: Routes the next physical key press to the given callback
-                (or stops doing so when given ``None``), to pick a hotkey.
+            shortcut_text: Returns the current global shortcut of an action as text.
         """
         super().__init__()
         self._config = config
         self._layouts = layouts
         self._on_change = on_change
-        self._capture_key = capture_key
+        self._shortcut_text = shortcut_text
         self._downloader = DictionaryDownloader()
         self.setWindowTitle(_("ntrcn Settings"))
         self.setWindowIcon(app_icon())
@@ -216,13 +206,9 @@ class SettingsDialog(QDialog):
     # --- General ---------------------------------------------------------------------
 
     def _general_page(self) -> QWidget:
-        self._word_hotkey = QLabel()
-        self._selection_hotkey = QLabel()
-        self._hotkey_button = QPushButton()
-        self._hotkey_button.clicked.connect(self._start_hotkey_capture)
-        self._hotkey_error = QLabel()
-        self._hotkey_error.setStyleSheet("color: #da4453")
-        self._show_hotkey()
+        self._shortcut_labels = {"fix-typed": QLabel(), "fix-selection": QLabel()}
+        configure = QPushButton(QIcon.fromTheme("configure-shortcuts"), _("Configure Shortcuts…"))
+        configure.clicked.connect(open_shortcut_settings)
         self._sound = self._choice(SOUND_MODES, "sound")
         self._sound_file = QPushButton(QIcon.fromTheme("document-open"), "")
         self._sound_file.clicked.connect(self._choose_sound_file)
@@ -240,38 +226,18 @@ class SettingsDialog(QDialog):
         start.toggled.connect(autostart.set_enabled)
 
         form = _form()
-        form.addRow(_("Fix typed text:"), self._word_hotkey)
-        form.addRow(_("Fix selected text:"), self._selection_hotkey)
-        form.addRow("", self._hotkey_button)
-        form.addRow("", self._hotkey_error)
+        form.addRow(_("Fix typed text:"), self._shortcut_labels["fix-typed"])
+        form.addRow(_("Fix selected text:"), self._shortcut_labels["fix-selection"])
+        form.addRow("", _left(configure))
         form.addRow(_("Sound when fixing:"), _left(self._sound, self._sound_file, self._listen))
         form.addRow("", self._sound_note)
         form.addRow(_("Autostart:"), start)
         return _page(_("General"), form)
 
-    def _show_hotkey(self) -> None:
-        title = _key_title(self._config.hotkey)
-        self._word_hotkey.setText(f"<b>{title}</b>")
-        self._selection_hotkey.setText(f"<b>Shift+{title}</b>")
-        self._hotkey_button.setText(_("Change Key…"))
-        self._hotkey_button.setEnabled(True)
-
-    def _start_hotkey_capture(self) -> None:
-        self._hotkey_error.clear()
-        self._hotkey_button.setText(_("Press a key… (Esc to cancel)"))
-        self._hotkey_button.setEnabled(False)
-        self._capture_key(self._on_key_captured)
-
-    def _on_key_captured(self, code: int) -> None:
-        if code in _TYPING_KEYS:
-            self._hotkey_error.setText(
-                _("{key} is needed for typing, choose another key").format(
-                    key=_key_title(key_name(code))
-                )
-            )
-        elif code != e.KEY_ESC:  # Esc cancels
-            self._change(hotkey=key_name(code))
-        self._show_hotkey()
+    def _show_shortcuts(self) -> None:
+        for action, label in self._shortcut_labels.items():
+            text = self._shortcut_text(action) or _("Not set")
+            label.setText(f"<b>{text}</b>")
 
     def _show_sound_controls(self) -> None:
         custom = self._config.sound == "custom"
@@ -457,15 +423,10 @@ class SettingsDialog(QDialog):
 
     def showEvent(self, event: QShowEvent) -> None:  # noqa: N802 - Qt override
         """Refresh what may have changed while the window was hidden."""
+        self._show_shortcuts()
         self._fill_flag_choices()
         self._run_checks()
         super().showEvent(event)
-
-    def hideEvent(self, event: QHideEvent) -> None:  # noqa: N802 - Qt override
-        """Stop waiting for a hotkey when the window goes away."""
-        self._capture_key(None)
-        self._show_hotkey()
-        super().hideEvent(event)
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802 - Qt override
         """Only hide: the window is reused next time."""

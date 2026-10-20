@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from typing import NamedTuple
 
 from evdev import ecodes as e
@@ -40,6 +41,9 @@ NEUTRAL_KEYS = frozenset([e.KEY_CAPSLOCK, e.KEY_NUMLOCK, e.KEY_SCROLLLOCK]) | MO
 
 # Upper bound so the buffer cannot grow forever while typing a long text without breaks.
 MAX_BUFFER = 256
+# The global shortcut is itself a key press that resets the buffer, a moment before KDE
+# reports the shortcut; a reset this recent can be undone.
+UNDO_RESET_S = 0.3
 
 
 class Keystroke(NamedTuple):
@@ -68,6 +72,10 @@ class KeyBuffer:
         self._keys: list[TypedKey] = []
         #: Grows with every change made by typing, so callers can tell nothing was typed.
         self.revision = 0
+        # What the last key-caused reset dropped, for undo_reset().
+        self._dropped: list[TypedKey] = []
+        self._dropped_revision = 0
+        self._dropped_at = 0.0
 
     def __len__(self) -> int:
         """Return the number of buffered keys."""
@@ -77,8 +85,16 @@ class KeyBuffer:
         """Forget everything typed so far."""
         if self._keys:
             logger.debug("Buffer reset, %d keys dropped", len(self._keys))
-        self._keys.clear()
+        self._keys = []
+        self._dropped = []
         self.revision += 1
+
+    def undo_reset(self, max_age: float = UNDO_RESET_S) -> None:
+        """Bring back what a key press dropped up to ``max_age`` seconds ago."""
+        recent = time.monotonic() - self._dropped_at <= max_age
+        if not self._keys and self._dropped and recent:
+            self._keys, self._dropped = self._dropped, []
+            self.revision = self._dropped_revision
 
     def press(self, code: int, held: set[int], layout: int) -> None:
         """Update the buffer for a key press.
@@ -90,13 +106,18 @@ class KeyBuffer:
         """
         if code in NEUTRAL_KEYS:
             return
+        revision = self.revision
         self.revision += 1
         if code == e.KEY_BACKSPACE and not held & COMMAND_MODIFIERS:
             if self._keys:
                 self._keys.pop()
             return
         if code not in CHAR_KEYS or held & COMMAND_MODIFIERS:
-            self.reset()
+            if self._keys:
+                logger.debug("Buffer reset by a key, %d keys dropped", len(self._keys))
+            self._dropped, self._dropped_revision = self._keys, revision
+            self._dropped_at = time.monotonic()
+            self._keys = []
             return
         self._keys.append(TypedKey(Keystroke(code, bool(held & SHIFT_KEYS)), layout))
         del self._keys[:-MAX_BUFFER]
@@ -140,17 +161,3 @@ class KeyBuffer:
         start = len(self._keys) - count
         for i in range(start, len(self._keys)):
             self._keys[i] = self._keys[i]._replace(layout=layout)
-
-
-def key_code(name: str) -> int | None:
-    """Return the evdev code of a key named like ``PAUSE`` or ``F13``, or ``None``."""
-    code = e.ecodes.get(f"KEY_{name.upper()}")
-    return code if isinstance(code, int) else None
-
-
-def key_name(code: int) -> str:
-    """Return the name of an evdev key code without the ``KEY_`` prefix."""
-    name = e.KEY.get(code, str(code))
-    if isinstance(name, list):  # aliases, e.g. KEY_MUTE / KEY_MIN_INTERESTING
-        name = name[0]
-    return str(name).removeprefix("KEY_")
