@@ -37,12 +37,17 @@ class FakeKde:
 class FakeTyper:
     def __init__(self) -> None:
         self.log: list[Any] = []
+        self.strokes: list[Keystroke] = []
 
     def erase(self, count: int) -> None:
         self.log.append(("erase", count))
 
     def type(self, strokes: Iterable[Keystroke]) -> None:
-        self.log.append(("type", [s.code for s in strokes]))
+        self.strokes = list(strokes)
+        self.log.append(("type", [s.code for s in self.strokes]))
+
+    def select_back(self, count: int) -> None:
+        self.log.append(("select", count))
 
 
 @pytest.fixture
@@ -227,3 +232,31 @@ def test_typed_text_never_reaches_the_log(
     press(converter, e.KEY_PAUSE, held={e.KEY_LEFTSHIFT})
     assert caplog.records
     assert "ghbdtn" not in caplog.text and "привет" not in caplog.text
+
+
+def test_change_case_retypes_and_reselects(setup: Any, monkeypatch: pytest.MonkeyPatch) -> None:
+    converter, kde, typer = setup
+    monkeypatch.setattr(ntrcn.converter, "read_primary_selection", lambda: "ghb")
+    converter.change_case()
+    assert kde.index == 0  # the current layout has the letters
+    assert typer.log == [("type", [e.KEY_G, e.KEY_H, e.KEY_B]), ("select", 3)]
+    assert all(stroke.shift for stroke in typer.strokes)  # "GHB"
+
+
+def test_change_case_switches_to_a_layout_that_has_the_letters(
+    setup: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    converter, kde, typer = setup
+    monkeypatch.setattr(ntrcn.converter, "read_primary_selection", lambda: "привет")
+    converter.change_case()
+    assert kde.index == 1
+    assert typer.log[-1] == ("select", 6)
+
+
+def test_change_case_ignores_text_without_letters(
+    setup: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    converter, _kde, typer = setup
+    monkeypatch.setattr(ntrcn.converter, "read_primary_selection", lambda: "123")
+    converter.change_case()
+    assert typer.log == []

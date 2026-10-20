@@ -17,6 +17,8 @@ typing. Works in any application, terminals included, and with any number of lay
 - <kbd>Pause</kbd> again sends the same text to the next layout; with two layouts this undoes
   the change.
 - <kbd>Shift</kbd>+<kbd>Pause</kbd> retypes the selected text.
+- <kbd>Ctrl</kbd>+<kbd>Pause</kbd> changes the case of the selected text: lower, UPPER,
+  Title, and round again.
 - With three or more layouts, the dictionaries pick the right target layout.
 - Tray indicator: flag, layout name, both, the app icon, or nothing.
 - Optional sound, autostart, a diagnostics page.
@@ -62,6 +64,7 @@ make install-user   # ~/.local/bin/ntrcn, menu entry, autostart
 | <kbd>Pause</kbd> | Retype the mistyped text before the cursor |
 | <kbd>Pause</kbd> again | Same text in the next layout |
 | <kbd>Shift</kbd>+<kbd>Pause</kbd> | Retype the selection |
+| <kbd>Ctrl</kbd>+<kbd>Pause</kbd> | Change the case of the selection |
 
 These are the default shortcuts; change them in System Settings → Keyboard → Shortcuts →
 ntrcn, like those of any KDE application. Left-click the tray indicator to switch layouts, or

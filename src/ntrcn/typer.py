@@ -28,7 +28,7 @@ class Typer:
         Raises:
             PermissionError: If /dev/uinput is not writable by the user.
         """
-        keys = CHAR_KEYS | {e.KEY_LEFTSHIFT, e.KEY_BACKSPACE, e.KEY_ENTER}
+        keys = CHAR_KEYS | {e.KEY_LEFTSHIFT, e.KEY_BACKSPACE, e.KEY_ENTER, e.KEY_LEFT}
         # Any: older python3-evdev (Debian 13) has no type hints for UInput's methods.
         self._device: Any = UInput(
             {e.EV_KEY: sorted(keys)}, name=DEVICE_NAME, vendor=VENDOR_ID, product=PRODUCT_ID
@@ -60,3 +60,7 @@ class Typer:
     def erase(self, count: int) -> None:
         """Press Backspace ``count`` times."""
         self.type([Keystroke(e.KEY_BACKSPACE)] * count)
+
+    def select_back(self, count: int) -> None:
+        """Select the ``count`` characters before the caret (Shift+Left)."""
+        self.type([Keystroke(e.KEY_LEFT, shift=True)] * count)

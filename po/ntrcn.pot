@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ntrcn\n"
 "Report-Msgid-Bugs-To: https://github.com/DayDve/ntrcn/issues\n"
-"POT-Creation-Date: 2026-10-20 09:18+0300\n"
+"POT-Creation-Date: 2026-10-20 15:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/ntrcn/app.py:76
+#: src/ntrcn/app.py:77
 msgid "Fix typed text"
 msgstr ""
 
-#: src/ntrcn/app.py:77
+#: src/ntrcn/app.py:78
 msgid "Fix selected text"
+msgstr ""
+
+#: src/ntrcn/app.py:79
+msgid "Change case of selected text"
 msgstr ""
 
 #: src/ntrcn/config.py:20
@@ -152,152 +156,156 @@ msgstr ""
 msgid "ntrcn Settings"
 msgstr ""
 
-#: src/ntrcn/settings.py:172 src/ntrcn/settings.py:235
+#: src/ntrcn/settings.py:172 src/ntrcn/settings.py:240
 msgid "General"
 msgstr ""
 
-#: src/ntrcn/settings.py:173 src/ntrcn/settings.py:302
+#: src/ntrcn/settings.py:173 src/ntrcn/settings.py:307
 msgid "Indicator"
 msgstr ""
 
-#: src/ntrcn/settings.py:174 src/ntrcn/settings.py:354
+#: src/ntrcn/settings.py:174 src/ntrcn/settings.py:359
 msgid "Diagnostics"
 msgstr ""
 
-#: src/ntrcn/settings.py:175 src/ntrcn/settings.py:420
+#: src/ntrcn/settings.py:175 src/ntrcn/settings.py:425
 msgid "About"
 msgstr ""
 
-#: src/ntrcn/settings.py:210
+#: src/ntrcn/settings.py:214
 msgid "Configure Shortcuts…"
 msgstr ""
 
-#: src/ntrcn/settings.py:216
+#: src/ntrcn/settings.py:220
 msgid "Listen"
 msgstr ""
 
-#: src/ntrcn/settings.py:219
+#: src/ntrcn/settings.py:223
 #, python-brace-format
 msgid "Sounds longer than {seconds} seconds are cut off."
 msgstr ""
 
-#: src/ntrcn/settings.py:224
+#: src/ntrcn/settings.py:228
 msgid "Start when I log in"
 msgstr ""
 
-#: src/ntrcn/settings.py:229
+#: src/ntrcn/settings.py:233
 msgid "Fix typed text:"
 msgstr ""
 
-#: src/ntrcn/settings.py:230
+#: src/ntrcn/settings.py:234
 msgid "Fix selected text:"
 msgstr ""
 
-#: src/ntrcn/settings.py:232
+#: src/ntrcn/settings.py:235
+msgid "Change case of selection:"
+msgstr ""
+
+#: src/ntrcn/settings.py:237
 msgid "Sound when fixing:"
 msgstr ""
 
-#: src/ntrcn/settings.py:234
+#: src/ntrcn/settings.py:239
 msgid "Autostart:"
 msgstr ""
 
-#: src/ntrcn/settings.py:239
+#: src/ntrcn/settings.py:244
 msgid "Not set"
 msgstr ""
 
-#: src/ntrcn/settings.py:246
+#: src/ntrcn/settings.py:251
 msgid "Choose File…"
 msgstr ""
 
-#: src/ntrcn/settings.py:253
+#: src/ntrcn/settings.py:258
 msgid "Sound when fixing"
 msgstr ""
 
-#: src/ntrcn/settings.py:253
+#: src/ntrcn/settings.py:258
 msgid "Sounds (*.oga *.ogg *.wav *.flac)"
 msgstr ""
 
-#: src/ntrcn/settings.py:272
+#: src/ntrcn/settings.py:277
 msgid "Tray indicator:"
 msgstr ""
 
-#: src/ntrcn/settings.py:273 src/ntrcn/settings.py:274
+#: src/ntrcn/settings.py:278 src/ntrcn/settings.py:279
 msgid "Icon theme:"
 msgstr ""
 
-#: src/ntrcn/settings.py:277
+#: src/ntrcn/settings.py:282
 msgid ""
 "Without the indicator, open the settings by starting ntrcn again from the "
 "application menu or with “Settings” in the context menu of its entry."
 msgstr ""
 
-#: src/ntrcn/settings.py:294
+#: src/ntrcn/settings.py:299
 msgid ""
 "A layout's picture is the file <code>&lt;layout&gt;.svg</code> or <code>."
 "png</code> in the flags folder, for example <code>de.png</code>. Files there "
 "are picked up at once."
 msgstr ""
 
-#: src/ntrcn/settings.py:299
+#: src/ntrcn/settings.py:304
 msgid "Open Flags Folder"
 msgstr ""
 
-#: src/ntrcn/settings.py:305
+#: src/ntrcn/settings.py:310
 msgid "Layout flags"
 msgstr ""
 
-#: src/ntrcn/settings.py:320
+#: src/ntrcn/settings.py:325
 msgid "Choose Picture…"
 msgstr ""
 
-#: src/ntrcn/settings.py:322
+#: src/ntrcn/settings.py:327
 msgid "Reset"
 msgstr ""
 
-#: src/ntrcn/settings.py:332
+#: src/ntrcn/settings.py:337
 #, python-brace-format
 msgid "Picture for the {layout} layout"
 msgstr ""
 
-#: src/ntrcn/settings.py:334
+#: src/ntrcn/settings.py:339
 msgid "Pictures (*.svg *.png)"
 msgstr ""
 
-#: src/ntrcn/settings.py:352
+#: src/ntrcn/settings.py:357
 msgid "Check Again"
 msgstr ""
 
-#: src/ntrcn/settings.py:375
+#: src/ntrcn/settings.py:380
 msgid "Download Dictionary"
 msgstr ""
 
-#: src/ntrcn/settings.py:384
+#: src/ntrcn/settings.py:389
 msgid "Downloading…"
 msgstr ""
 
-#: src/ntrcn/settings.py:399
+#: src/ntrcn/settings.py:404
 #, python-brace-format
 msgid "Version {version}"
 msgstr ""
 
-#: src/ntrcn/settings.py:404
+#: src/ntrcn/settings.py:409
 msgid ""
 "Fixes text typed in the wrong keyboard layout on KDE Plasma 6 (Wayland)."
 msgstr ""
 
-#: src/ntrcn/settings.py:409
+#: src/ntrcn/settings.py:414
 msgid "Website:"
 msgstr ""
 
-#: src/ntrcn/settings.py:410
+#: src/ntrcn/settings.py:415
 msgid "License:"
 msgstr ""
 
-#: src/ntrcn/settings.py:411
+#: src/ntrcn/settings.py:416
 msgid "Flags:"
 msgstr ""
 
-#: src/ntrcn/settings.py:413
+#: src/ntrcn/settings.py:418
 msgid "Dictionaries:"
 msgstr ""
 

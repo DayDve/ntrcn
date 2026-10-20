@@ -69,12 +69,14 @@ class Session:
         actions = {
             "fix-typed": self.converter.fix_typed,
             "fix-selection": self.converter.fix_selection,
+            "change-case": self.converter.change_case,
         }
         self.shortcuts = GlobalShortcuts(
             bus,
             [
                 Shortcut("fix-typed", _("Fix typed text"), "Pause"),
                 Shortcut("fix-selection", _("Fix selected text"), "Shift+Pause"),
+                Shortcut("change-case", _("Change case of selected text"), "Ctrl+Pause"),
             ],
             lambda action: actions.get(action, lambda: None)(),
         )

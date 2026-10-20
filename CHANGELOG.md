@@ -12,10 +12,11 @@ All notable changes to this project are documented in this file. The format is b
   dictionaries to find where it starts; pressing it again cycles the same text through the
   layouts.
 - <kbd>Shift</kbd>+<kbd>Pause</kbd> retypes the selected text.
+- <kbd>Ctrl</kbd>+<kbd>Pause</kbd> cycles the case of the selected text: lower, UPPER, Title.
 - Any number of layouts; with three or more, the dictionaries pick the target layout.
 - Tray indicator: flag, layout name, both, the app icon or none, with light and dark themes.
-- Global shortcuts registered with KDE and set in System Settings (Pause, Shift+Pause by
-  default).
+- Global shortcuts registered with KDE and set in System Settings (Pause, Shift+Pause,
+  Ctrl+Pause by default).
 - Settings: sound, autostart, custom flag pictures, diagnostics with dictionary
   install hints and download.
 - Interface in English and Russian (gettext); more languages can be added in `po/`.
