@@ -31,6 +31,7 @@
 ./usr/lib/python3/dist-packages/ntrcn/org.daydve.ntrcn.desktop
 ./usr/lib/python3/dist-packages/ntrcn/selection.py
 ./usr/lib/python3/dist-packages/ntrcn/settings.py
+./usr/lib/python3/dist-packages/ntrcn/shortcuts.py
 ./usr/lib/python3/dist-packages/ntrcn/sni.py
 ./usr/lib/python3/dist-packages/ntrcn/sound.py
 ./usr/lib/python3/dist-packages/ntrcn/sounds/keyboard.wav

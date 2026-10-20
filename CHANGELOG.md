@@ -14,7 +14,9 @@ All notable changes to this project are documented in this file. The format is b
 - <kbd>Shift</kbd>+<kbd>Pause</kbd> retypes the selected text.
 - Any number of layouts; with three or more, the dictionaries pick the target layout.
 - Tray indicator: flag, layout name, both, the app icon or none, with light and dark themes.
-- Settings: hotkey, sound, autostart, custom flag pictures, diagnostics with dictionary
+- Global shortcuts registered with KDE and set in System Settings (Pause, Shift+Pause by
+  default).
+- Settings: sound, autostart, custom flag pictures, diagnostics with dictionary
   install hints and download.
 - Interface in English and Russian (gettext); more languages can be added in `po/`.
 - Debian package.

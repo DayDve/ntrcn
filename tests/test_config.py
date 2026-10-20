@@ -10,7 +10,6 @@ def test_missing_file_gives_defaults(tmp_path: Path) -> None:
 def test_round_trip(tmp_path: Path) -> None:
     path = tmp_path / "config.json"
     config = Config(
-        hotkey="F13",
         sound="custom",
         sound_file="/x.oga",
         tray_indicator="none",
@@ -22,9 +21,7 @@ def test_round_trip(tmp_path: Path) -> None:
 
 def test_invalid_values_fall_back_to_defaults(tmp_path: Path) -> None:
     path = tmp_path / "config.json"
-    path.write_text(
-        '{"hotkey": 5, "sound": "loud", "tray_indicator": "huge", "text_theme": "color"}'
-    )
+    path.write_text('{"sound": "loud", "tray_indicator": "huge", "text_theme": "color"}')
     assert load_config(path) == Config()
 
 
