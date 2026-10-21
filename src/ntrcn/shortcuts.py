@@ -69,7 +69,6 @@ class GlobalShortcuts:
             self._kga = dbus.Interface(
                 bus.get_object(SERVICE, "/kglobalaccel"), "org.kde.KGlobalAccel"
             )
-            self._remove_stale_actions()
             for shortcut in shortcuts:
                 action = self._action(shortcut)
                 self._kga.doRegister(action)
@@ -78,6 +77,7 @@ class GlobalShortcuts:
                     action, _keys(shortcut.default), dbus.UInt32(_SET_PRESENT)
                 )
             path = self._kga.getComponent(COMPONENT)
+            self._remove_stale_actions(bus.get_object(SERVICE, path))
         except dbus.DBusException as err:
             logger.warning("Global shortcuts are not available: %s", err)
             self._kga = None
@@ -94,12 +94,16 @@ class GlobalShortcuts:
     def _action(shortcut: Shortcut) -> list[str]:
         return [COMPONENT, shortcut.id, "ntrcn", shortcut.title]
 
-    def _remove_stale_actions(self) -> None:
-        """Forget actions of earlier versions so they do not linger in System Settings."""
+    def _remove_stale_actions(self, component: Any) -> None:
+        """Forget actions of earlier versions so they do not linger in System Settings.
+
+        ``shortcutNames`` lists inactive actions too, unlike ``allActionsForComponent``.
+        """
         ours = {shortcut.id for shortcut in self._shortcuts}
-        for action in self._kga.allActionsForComponent([COMPONENT, "", "", ""]):
-            if str(action[1]) not in ours:
-                self._kga.unregister(COMPONENT, str(action[1]))
+        names = component.shortcutNames(dbus_interface="org.kde.kglobalaccel.Component")
+        for name in names:
+            if str(name) not in ours:
+                self._kga.unregister(COMPONENT, str(name))
 
     def text(self, shortcut_id: str) -> str:
         """Current shortcut of an action as text, empty if none or unavailable."""
