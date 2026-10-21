@@ -1,5 +1,9 @@
+from pathlib import Path
+
+import ntrcn
 from ntrcn.app import _parse_args
-from ntrcn.autostart import DESKTOP_FILE
+
+DESKTOP_FILE = Path(ntrcn.__file__).with_name(f"{ntrcn.APP_ID}.desktop")
 
 
 def test_settings_flag() -> None:
