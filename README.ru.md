@@ -75,17 +75,7 @@ sudo usermod -aG input $USER
 
 ### Из моего APT-репозитория
 
-ntrcn есть и в моём APT-репозитории [apt.smbit.pro](https://apt.smbit.pro), он собран для
-Ubuntu 24.04 (noble): KDE neon или Ubuntu 24.04 с подключённым репозиторием KDE neon.
-Обновления тогда приходят вместе с системными.
-
-```bash
-curl -sL https://apt.smbit.pro | bash
-sudo apt install ntrcn
-sudo usermod -aG input $USER
-```
-
-После этого так же перезайдите в систему.
+ntrcn есть и в моём APT-репозитории: [apt.smbit.pro](https://apt.smbit.pro).
 
 ### Из исходников
 
