@@ -75,17 +75,7 @@ Log out and back in: membership in the `input` group (to read keyboards) and acc
 
 ### From my APT repository
 
-ntrcn is also in my APT repository [apt.smbit.pro](https://apt.smbit.pro), built for
-Ubuntu 24.04 (noble): KDE neon, or Ubuntu 24.04 with the KDE neon repository. Updates then
-come with the rest of the system.
-
-```bash
-curl -sL https://apt.smbit.pro | bash
-sudo apt install ntrcn
-sudo usermod -aG input $USER
-```
-
-Then log out and back in, as above.
+ntrcn is also in my APT repository: [apt.smbit.pro](https://apt.smbit.pro).
 
 ### From source
 
