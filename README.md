@@ -1,3 +1,5 @@
+<p align="center"><img src="src/ntrcn/icons/org.daydve.ntrcn.svg" alt="" width="128"></p>
+
 # ntrcn
 
 [![English](https://img.shields.io/badge/lang-en-blue.svg)](README.md)
@@ -11,16 +13,13 @@ typing. Works in any application, terminals included, and with any number of lay
 
 ## Features
 
-- <kbd>Pause</kbd> retypes the mistyped part at the end of the text. Hunspell dictionaries tell
-  where it starts, so words typed correctly before it stay as they are
-  (`hello ghbdtn` → `hello привет`).
-- <kbd>Pause</kbd> again sends the same text to the next layout; with two layouts this undoes
-  the change.
-- <kbd>Shift</kbd>+<kbd>Pause</kbd> retypes the selected text.
-- <kbd>Ctrl</kbd>+<kbd>Pause</kbd> changes the case of the selected text: lower, UPPER,
-  Title, and round again.
-- With three or more layouts, the dictionaries pick the right target layout.
-- Tray indicator: flag, layout name, both, the app icon, or nothing.
+- Fixes the last typed words or the selected text and switches the layout.
+- Hunspell dictionaries tell where the mistyped part starts, so words typed correctly before
+  it stay as they are (`hello ghbdtn` → `hello привет`).
+- Any number of layouts; with three or more, the dictionaries pick the right one.
+- Changing the case of the selected text.
+- Tray indicator: flag, layout name, both, the app icon, or nothing. Flags can use your own
+  pictures.
 - Optional sound, autostart, a diagnostics page.
 - Interface in English and Russian; translations are welcome (see
   [CONTRIBUTING.md](CONTRIBUTING.md)).
@@ -38,8 +37,11 @@ typing. Works in any application, terminals included, and with any number of lay
 
 For Debian 13+, Ubuntu 25.10+ and KDE neon. Older releases do not ship Plasma 6.
 
+Download the package from the [releases page](https://github.com/DayDve/ntrcn/releases/latest)
+and install it:
+
 ```bash
-sudo apt install ./ntrcn_0.1.0_all.deb
+sudo apt install ./ntrcn_*_all.deb
 sudo usermod -aG input $USER
 ```
 
@@ -62,7 +64,7 @@ make install-user   # ~/.local/bin/ntrcn, menu entry, autostart
 | Key | Action |
 | --- | --- |
 | <kbd>Pause</kbd> | Retype the mistyped text before the cursor |
-| <kbd>Pause</kbd> again | Same text in the next layout |
+| <kbd>Pause</kbd> again | Same text in the next layout (with two layouts, undo) |
 | <kbd>Shift</kbd>+<kbd>Pause</kbd> | Retype the selection |
 | <kbd>Ctrl</kbd>+<kbd>Pause</kbd> | Change the case of the selection |
 
@@ -137,6 +139,28 @@ make deb-check deb-test  # check its contents and install it into clean containe
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the development rules.
+
+## Background
+
+I had long missed a layout switcher on Linux. I touch-type with ten fingers (thanks to
+V. V. Shakhidzhanyan and his [Solo on the Keyboard](https://ergosolo.ru)), but now and then
+I type a phrase quickly and only then notice I forgot to switch the layout.
+
+On X11 there was [xneur](https://github.com/AndrewCrewKuznetsov/xneur-devel), but I moved to
+Wayland long ago, and found nothing decent there. I wrote a bash script of a few lines: on
+<kbd>Pause</kbd> it used `wl-clipboard` and `ydotool` to copy the text, convert it and paste
+it back. I used it for years, but it is a crude hack and works poorly.
+
+What also annoys me is that KDE Plasma does not let you put your own flag picture on the
+layout indicator. In KDE 4 it was enough to drop a `flag.png` into a folder in your home
+directory, in Plasma 5 you had to replace system files, and in Plasma 6 the flags are drawn
+from the emoji font, with nothing to replace. Xfce still allows it, but that is no reason to
+switch to it.
+
+So I decided to kill two birds with one stone and finally make a proper layout switcher,
+remembering Punto Switcher, which I used back before Yandex bought it.
+
+Why am I doing this? Because I can.
 
 ## License
 
