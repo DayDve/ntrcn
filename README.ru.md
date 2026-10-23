@@ -37,11 +37,9 @@
 
 Для Debian 13+, Ubuntu 25.10+ и KDE neon. В более старых выпусках нет Plasma 6.
 
-Скачайте пакет со [страницы релизов](https://github.com/DayDve/ntrcn/releases/latest) и
-установите его:
-
 ```bash
-sudo apt install ./ntrcn_*_all.deb
+wget https://github.com/DayDve/ntrcn/releases/download/v0.1.0/ntrcn_0.1.0_all.deb
+sudo apt install ./ntrcn_0.1.0_all.deb
 sudo usermod -aG input $USER
 ```
 

@@ -58,6 +58,9 @@ jobs:
           grep -q "^version = \"$version\"$" pyproject.toml
           grep -q "^__version__ = \"$version\"$" src/ntrcn/__init__.py
           head -1 debian/changelog | grep -q "($version)"
+          for readme in README.md README.ru.md; do
+            grep -q "download/v$version/ntrcn_${version}_all.deb" "$readme"
+          done
       - name: Publish the release
         env:
           GH_TOKEN: ${{ github.token }}
