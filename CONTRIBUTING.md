@@ -42,8 +42,8 @@ The interface is written in English and translated with gettext (domain `ntrcn`)
 ## Release
 
 1. Branch `release/vX.Y.Z` from `develop`; set the version in `pyproject.toml`,
-   `src/ntrcn/__init__.py` and `debian/changelog`; move `[Unreleased]` in `CHANGELOG.md` to
-   `[X.Y.Z] - YYYY-MM-DD`.
+   `src/ntrcn/__init__.py`, `debian/changelog` and the install commands in both READMEs;
+   move `[Unreleased]` in `CHANGELOG.md` to `[X.Y.Z] - YYYY-MM-DD`.
 2. `make check deb deb-check deb-test`.
 3. Merge into `master`, tag `vX.Y.Z`, merge back into `develop`, attach the `.deb` to the
    GitHub release.

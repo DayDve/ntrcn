@@ -37,11 +37,9 @@ typing. Works in any application, terminals included, and with any number of lay
 
 For Debian 13+, Ubuntu 25.10+ and KDE neon. Older releases do not ship Plasma 6.
 
-Download the package from the [releases page](https://github.com/DayDve/ntrcn/releases/latest)
-and install it:
-
 ```bash
-sudo apt install ./ntrcn_*_all.deb
+wget https://github.com/DayDve/ntrcn/releases/download/v0.1.0/ntrcn_0.1.0_all.deb
+sudo apt install ./ntrcn_0.1.0_all.deb
 sudo usermod -aG input $USER
 ```
 
