@@ -55,6 +55,7 @@ remembering Punto Switcher, which I used back before Yandex bought it.
 - KDE Plasma 6 on Wayland
 - Python 3.10+, PySide6, `python3-evdev`, `python3-dbus`
 - `wl-clipboard`, `libxkbcommon`, `libhunspell`
+- `gettext`, to install from source
 - Hunspell dictionaries for your layouts (optional, see [Dictionaries](#dictionaries))
 
 ## Installation
@@ -80,13 +81,12 @@ ntrcn is also in my APT repository: [apt.smbit.pro](https://apt.smbit.pro).
 ### From source
 
 ```bash
-sudo apt install python3-evdev python3-dbus python3-pyside6.qtwidgets python3-pyside6.qtsvg \
-    python3-pyside6.qtnetwork wl-clipboard libxkbcommon0 libhunspell-1.7-0
-sudo usermod -aG input $USER
-sudo install -m 644 src/ntrcn/70-ntrcn-uinput.rules /etc/udev/rules.d/
-sudo udevadm control --reload && sudo udevadm trigger /dev/uinput
-make install-user   # ~/.local/bin/ntrcn, menu entry, autostart
+git clone https://github.com/DayDve/ntrcn.git
+cd ntrcn
+make install
 ```
+
+To remove it, run `make uninstall`.
 
 ## Usage
 
