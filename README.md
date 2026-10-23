@@ -86,7 +86,7 @@ cd ntrcn
 make install
 ```
 
-Then log out and back in. To remove it, run `make uninstall`.
+To remove it, run `make uninstall`.
 
 ## Usage
 
