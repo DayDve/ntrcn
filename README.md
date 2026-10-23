@@ -11,6 +11,26 @@ Typed `ghbdtn vbh` while the English layout was active instead of the Russian on
 Press <kbd>Pause</kbd> and it becomes `привет мир`, with the layout switched so you can keep
 typing. Works in any application, terminals included, and with any number of layouts.
 
+## Background
+
+I had long missed a layout switcher on Linux. I touch-type with ten fingers (thanks to
+V. V. Shakhidzhanyan and his [Solo on the Keyboard](https://ergosolo.ru)), but now and then
+I type a phrase quickly and only then notice I forgot to switch the layout.
+
+On X11 there was [xneur](https://github.com/AndrewCrewKuznetsov/xneur-devel), but I moved to
+Wayland long ago, and found nothing decent there. I wrote a bash script of a few lines: on
+<kbd>Pause</kbd> it used `wl-clipboard` and `ydotool` to copy the text, convert it and paste
+it back. I used it for years, but it is a crude hack and works poorly.
+
+What also annoys me is that KDE Plasma does not let you put your own flag picture on the
+layout indicator. In KDE 4 it was enough to drop a `flag.png` into a folder in your home
+directory, in Plasma 5 you had to replace system files, and in Plasma 6 the flags are drawn
+from the emoji font, with nothing to replace. Xfce still allows it, but that is no reason to
+switch to it.
+
+So I decided to kill two birds with one stone and finally make a proper layout switcher,
+remembering Punto Switcher, which I used back before Yandex bought it.
+
 ## Features
 
 - Fixes the last typed words or the selected text and switches the layout.
@@ -35,7 +55,8 @@ typing. Works in any application, terminals included, and with any number of lay
 
 ### Debian / Ubuntu / KDE neon package
 
-For Debian 13+, Ubuntu 25.10+ and KDE neon. Older releases do not ship Plasma 6.
+For Debian 13+, Ubuntu 25.10+ and KDE neon. Ubuntu 24.04 ships Plasma 5, so there it works
+only with the KDE neon repository added.
 
 ```bash
 wget https://github.com/DayDve/ntrcn/releases/download/v0.1.0/ntrcn_0.1.0_all.deb
@@ -138,31 +159,11 @@ make deb-check deb-test  # check its contents and install it into clean containe
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the development rules.
 
-## Background
-
-I had long missed a layout switcher on Linux. I touch-type with ten fingers (thanks to
-V. V. Shakhidzhanyan and his [Solo on the Keyboard](https://ergosolo.ru)), but now and then
-I type a phrase quickly and only then notice I forgot to switch the layout.
-
-On X11 there was [xneur](https://github.com/AndrewCrewKuznetsov/xneur-devel), but I moved to
-Wayland long ago, and found nothing decent there. I wrote a bash script of a few lines: on
-<kbd>Pause</kbd> it used `wl-clipboard` and `ydotool` to copy the text, convert it and paste
-it back. I used it for years, but it is a crude hack and works poorly.
-
-What also annoys me is that KDE Plasma does not let you put your own flag picture on the
-layout indicator. In KDE 4 it was enough to drop a `flag.png` into a folder in your home
-directory, in Plasma 5 you had to replace system files, and in Plasma 6 the flags are drawn
-from the emoji font, with nothing to replace. Xfce still allows it, but that is no reason to
-switch to it.
-
-So I decided to kill two birds with one stone and finally make a proper layout switcher,
-remembering Punto Switcher, which I used back before Yandex bought it.
-
-Why am I doing this? Because I can.
-
 ## License
 
 MIT, see [LICENSE](LICENSE). The flags are from [vlags](https://vlags.com), CC BY-SA 4.0;
 the keyboard sound is mixed from
 [Keyboard Soundpack #1](https://opengameart.org/content/keyboard-soundpack-1-typing-and-single-keystrokes),
 CC0.
+
+Why am I doing this? Because I can.

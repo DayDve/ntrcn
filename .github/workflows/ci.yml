@@ -67,5 +67,5 @@ jobs:
         run: |
           version="${GITHUB_REF_NAME#v}"
           # The notes are the CHANGELOG section of this version.
-          awk -v v="$version" '/^## \[/ { on = index($0, "[" v "]") > 0; next } on' CHANGELOG.md > notes.md
+          awk -v v="$version" '/^## \[/ { on = index($0, "[" v "]") > 0; next } /^\[[^]]*\]: / { next } on' CHANGELOG.md > notes.md
           gh release create "$GITHUB_REF_NAME" dist/*.deb --title "ntrcn $version" --notes-file notes.md
