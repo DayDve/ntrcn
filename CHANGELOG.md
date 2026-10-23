@@ -6,6 +6,8 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-23
+
 ### Added
 
 - <kbd>Pause</kbd> retypes the end of the text typed in the wrong layout, using hunspell
@@ -21,3 +23,6 @@ All notable changes to this project are documented in this file. The format is b
   install hints and download.
 - Interface in English and Russian (gettext); more languages can be added in `po/`.
 - Debian package.
+
+[Unreleased]: https://github.com/DayDve/ntrcn/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/DayDve/ntrcn/releases/tag/v0.1.0
