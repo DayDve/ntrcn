@@ -44,6 +44,12 @@ remembering Punto Switcher, which I used back before Yandex bought it.
 - Interface in English and Russian; translations are welcome (see
   [CONTRIBUTING.md](CONTRIBUTING.md)).
 
+## Screenshots
+
+<img src="docs/screenshots/en/general.png" alt="Settings: General" width="49%"> <img src="docs/screenshots/en/indicator.png" alt="Settings: Indicator" width="49%">
+
+<img src="docs/screenshots/tray.png" alt="Tray indicator">
+
 ## Requirements
 
 - KDE Plasma 6 on Wayland
@@ -66,6 +72,10 @@ sudo usermod -aG input $USER
 
 Log out and back in: membership in the `input` group (to read keyboards) and access to
 `/dev/uinput` (granted by the bundled udev rule) take effect in a new session.
+
+### From my APT repository
+
+ntrcn is also in my APT repository: [apt.smbit.pro](https://apt.smbit.pro).
 
 ### From source
 

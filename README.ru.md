@@ -44,6 +44,12 @@ Punto Switcher, которым пользовался ещё до того, ка
 - Интерфейс на английском и русском; переводы на другие языки приветствуются (см.
   [CONTRIBUTING.md](CONTRIBUTING.md)).
 
+## Скриншоты
+
+<img src="docs/screenshots/ru/general.png" alt="Настройки: общие" width="49%"> <img src="docs/screenshots/ru/indicator.png" alt="Настройки: индикатор" width="49%">
+
+<img src="docs/screenshots/tray.png" alt="Индикатор в трее">
+
 ## Требования
 
 - KDE Plasma 6 на Wayland
@@ -66,6 +72,10 @@ sudo usermod -aG input $USER
 
 После этого перезайдите в систему: членство в группе `input` (чтение клавиатур) и доступ к
 `/dev/uinput` (его даёт правило udev из пакета) действуют с новой сессии.
+
+### Из моего APT-репозитория
+
+ntrcn есть и в моём APT-репозитории: [apt.smbit.pro](https://apt.smbit.pro).
 
 ### Из исходников
 
