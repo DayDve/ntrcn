@@ -86,7 +86,7 @@ cd ntrcn
 make install
 ```
 
-Затем перезайдите в систему. Удаление — `make uninstall`.
+Удаление — `make uninstall`.
 
 ## Использование
 
