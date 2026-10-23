@@ -117,3 +117,33 @@ def test_trailing_words_of_empty_or_blank_buffer() -> None:
     assert buffer.trailing_words() == []
     type_keys(buffer, [e.KEY_SPACE])
     assert buffer.trailing_words() == []
+
+
+def test_reset_by_a_key_can_be_undone_right_away() -> None:
+    buffer = KeyBuffer()
+    type_keys(buffer, [e.KEY_A, e.KEY_B])
+    revision = buffer.revision
+    buffer.press(e.KEY_PAUSE, set(), layout=0)
+    assert len(buffer) == 0
+    buffer.undo_reset()
+    assert codes(buffer.tail(1)) == [e.KEY_A, e.KEY_B]
+    assert buffer.revision == revision  # as if the key had not been pressed
+
+
+def test_old_or_click_resets_are_not_undone() -> None:
+    buffer = KeyBuffer()
+    type_keys(buffer, [e.KEY_A])
+    buffer.press(e.KEY_ENTER, set(), layout=0)
+    buffer.undo_reset(max_age=-1)  # too late
+    assert len(buffer) == 0
+    type_keys(buffer, [e.KEY_B])
+    buffer.reset()  # a click
+    buffer.undo_reset()
+    assert len(buffer) == 0
+
+
+def test_nothing_to_undo_once_typing_continued() -> None:
+    buffer = KeyBuffer()
+    type_keys(buffer, [e.KEY_A, e.KEY_ENTER, e.KEY_B])
+    buffer.undo_reset()
+    assert codes(buffer.tail(1)) == [e.KEY_B]

@@ -9,6 +9,7 @@ from pathlib import Path
 from PySide6.QtCore import QUrl
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
 
+from ntrcn.i18n import _
 from ntrcn.spelling import USER_DICTIONARY_DIR, locale_name
 
 logger = logging.getLogger(__name__)
@@ -75,10 +76,12 @@ class DictionaryDownloader:
         data = bytes(reply.readAll().data())
         if reply.error() != QNetworkReply.NetworkError.NoError:
             logger.warning("Downloading %s failed: %s", reply.url().toString(), reply.errorString())
-            on_done(f"Не удалось скачать словарь: {reply.errorString()}")
+            on_done(
+                _("Could not download the dictionary: {error}").format(error=reply.errorString())
+            )
             return
         if not data or data.lstrip().startswith(b"<"):  # an HTML page instead of a dictionary
-            on_done("Не удалось скачать словарь: сервер вернул не словарь")
+            on_done(_("Could not download the dictionary: the server sent something else"))
             return
         files[SUFFIXES[len(files)]] = data
         if len(files) < len(SUFFIXES):
@@ -87,7 +90,7 @@ class DictionaryDownloader:
         try:
             path = save_dictionary(language, files, self._directory)
         except OSError as err:
-            on_done(f"Не удалось сохранить словарь: {err}")
+            on_done(_("Could not save the dictionary: {error}").format(error=err))
             return
         logger.info("Downloaded the %s dictionary to %s", language, path)
         on_done(None)

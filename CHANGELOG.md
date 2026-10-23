@@ -6,14 +6,23 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-23
+
 ### Added
 
 - <kbd>Pause</kbd> retypes the end of the text typed in the wrong layout, using hunspell
   dictionaries to find where it starts; pressing it again cycles the same text through the
   layouts.
 - <kbd>Shift</kbd>+<kbd>Pause</kbd> retypes the selected text.
+- <kbd>Ctrl</kbd>+<kbd>Pause</kbd> cycles the case of the selected text: lower, UPPER, Title.
 - Any number of layouts; with three or more, the dictionaries pick the target layout.
 - Tray indicator: flag, layout name, both, the app icon or none, with light and dark themes.
-- Settings: hotkey, sound, autostart, custom flag pictures, diagnostics with dictionary
+- Global shortcuts registered with KDE and set in System Settings (Pause, Shift+Pause,
+  Ctrl+Pause by default).
+- Settings: sound, autostart, custom flag pictures, diagnostics with dictionary
   install hints and download.
+- Interface in English and Russian (gettext); more languages can be added in `po/`.
 - Debian package.
+
+[Unreleased]: https://github.com/DayDve/ntrcn/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/DayDve/ntrcn/releases/tag/v0.1.0

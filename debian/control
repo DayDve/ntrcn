@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: DayDve <daydve@smbit.pro>
 Build-Depends: debhelper-compat (= 13),
                dh-python,
+               gettext,
                pybuild-plugin-pyproject,
                python3-all,
                python3-setuptools,
@@ -23,6 +24,7 @@ Depends: ${misc:Depends},
          python3-pyside6.qtnetwork,
          python3-pyside6.qtsvg,
          python3-pyside6.qtwidgets (>= 6.5),
+         qt6-svg-plugins | qt6-svg,
          wl-clipboard,
 Recommends: hunspell-dictionary,
 Description: retype text typed in the wrong keyboard layout

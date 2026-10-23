@@ -11,7 +11,6 @@ from collections.abc import Callable
 import dbus
 import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
-from evdev import ecodes as e
 from PySide6.QtCore import QFileSystemWatcher, QLibraryInfo, QLocale, QTimer, QTranslator
 from PySide6.QtWidgets import QApplication
 
@@ -20,9 +19,10 @@ from ntrcn.appicon import app_icon
 from ntrcn.config import Config, load_config, save_config
 from ntrcn.converter import Converter
 from ntrcn.flags import USER_FLAGS_DIR
-from ntrcn.keys import key_code
+from ntrcn.i18n import _
 from ntrcn.layouts import KdeLayouts
 from ntrcn.settings import SettingsDialog
+from ntrcn.shortcuts import GlobalShortcuts, Shortcut
 from ntrcn.sound import chosen_sound, play
 from ntrcn.spelling import speller_for
 from ntrcn.tray import Tray
@@ -54,7 +54,7 @@ class Session:
         """Start converting and show the tray icon."""
         self.config = load_config()
         kde = KdeLayouts(bus)
-        self.tray = Tray(kde.set, self.show_settings)
+        self.tray = Tray(bus, kde.set, self.show_settings)
         self.watcher = InputWatcher()
         self.converter = Converter(
             kde,
@@ -64,8 +64,22 @@ class Session:
             on_convert=self._on_convert,
             speller=speller_for,
         )
-        for layout in self.converter.layouts:  # load dictionaries now, not on the first hotkey
+        for layout in self.converter.layouts:  # load dictionaries now, not on the first use
             speller_for(layout.name)
+        actions = {
+            "fix-typed": self.converter.fix_typed,
+            "fix-selection": self.converter.fix_selection,
+            "change-case": self.converter.change_case,
+        }
+        self.shortcuts = GlobalShortcuts(
+            bus,
+            [
+                Shortcut("fix-typed", _("Fix typed text"), "Pause"),
+                Shortcut("fix-selection", _("Fix selected text"), "Shift+Pause"),
+                Shortcut("change-case", _("Change case of selected text"), "Ctrl+Pause"),
+            ],
+            lambda action: actions.get(action, lambda: None)(),
+        )
         self.watcher.key_pressed.connect(self.converter.on_key_press)
         self.watcher.clicked.connect(self.converter.buffer.reset)
         self._settings: SettingsDialog | None = None
@@ -77,11 +91,6 @@ class Session:
         self._apply()
 
     def _apply(self) -> None:
-        hotkey = key_code(self.config.hotkey)
-        if hotkey is None:
-            logger.warning("Unknown hotkey %r, using PAUSE", self.config.hotkey)
-            hotkey = e.KEY_PAUSE
-        self.converter.hotkey = hotkey
         self.tray.indicator = self.config.tray_indicator
         self.tray.text_theme = self.config.text_theme
         self.tray.app_icon_theme = self.config.app_icon_theme
@@ -98,9 +107,6 @@ class Session:
         if sound:
             play(sound)
 
-    def _capture_key(self, callback: Callable[[int], None] | None) -> None:
-        self.converter.key_capture = callback
-
     def show_settings(self) -> None:
         """Open the settings window, or bring it to front."""
         if self._settings is None:
@@ -108,7 +114,7 @@ class Session:
                 self.config,
                 lambda: self.converter.layouts,
                 self.change_config,
-                self._capture_key,
+                self.shortcuts.text,
             )
         self._settings.show()
         self._settings.raise_()
@@ -184,7 +190,7 @@ def main(argv: list[str] | None = None) -> int:
     heartbeat.timeout.connect(lambda: None)
     heartbeat.start()
 
-    logger.info("ntrcn %s started, hotkey %s", __version__, session.config.hotkey)
+    logger.info("ntrcn %s started", __version__)
     try:
         return app.exec()
     finally:

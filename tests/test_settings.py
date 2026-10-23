@@ -2,7 +2,6 @@ from collections.abc import Callable
 from pathlib import Path
 
 import pytest
-from evdev import ecodes as e
 from PySide6.QtWidgets import QApplication, QComboBox, QPushButton
 
 from ntrcn import settings
@@ -10,42 +9,24 @@ from ntrcn.config import Config
 from ntrcn.diagnostics import Check
 from ntrcn.settings import SettingsDialog
 
-KeyCallback = Callable[[int], None]
+SHORTCUTS = {"fix-typed": "Pause", "fix-selection": "", "change-case": "Ctrl+Pause"}
 
 
 @pytest.fixture
-def dialog(qt_app: QApplication) -> tuple[SettingsDialog, list[Config], list[KeyCallback | None]]:
+def dialog(qt_app: QApplication) -> tuple[SettingsDialog, list[Config], None]:
     changes: list[Config] = []
-    captures: list[KeyCallback | None] = []
-    window = SettingsDialog(Config(), lambda: [], changes.append, captures.append)
-    return window, changes, captures
+    window = SettingsDialog(Config(), lambda: [], changes.append, SHORTCUTS.get)
+    return window, changes, None
 
 
-def capture(dialog: SettingsDialog, captures: list[KeyCallback | None], code: int) -> None:
-    dialog._start_hotkey_capture()
-    callback = captures[-1]
-    assert callback is not None
-    callback(code)
-
-
-def test_hotkey_is_changed_by_a_key_press(dialog: tuple) -> None:
-    window, changes, captures = dialog
-    capture(window, captures, e.KEY_F13)
-    assert changes[-1].hotkey == "F13"
-    assert "F13" in window._word_hotkey.text()
-
-
-def test_escape_cancels(dialog: tuple) -> None:
-    window, changes, captures = dialog
-    capture(window, captures, e.KEY_ESC)
-    assert changes == []
-
-
-def test_typing_keys_are_refused(dialog: tuple) -> None:
-    window, changes, captures = dialog
-    capture(window, captures, e.KEY_A)
-    assert changes == []
-    assert window._hotkey_error.text()
+def test_shortcuts_come_from_kde(dialog: tuple) -> None:
+    window, _changes, _ = dialog
+    window._show_shortcuts()
+    assert "Pause" in window._shortcut_labels["fix-typed"].text()
+    assert "Not set" in window._shortcut_labels["fix-selection"].text()
+    assert "Ctrl+Pause" in window._shortcut_labels["change-case"].text()
+    texts = [button.text() for button in window.findChildren(QPushButton)]
+    assert "Configure Shortcuts…" in texts  # opens System Settings; not clicked in tests
 
 
 class FakeDownloader:
@@ -59,15 +40,15 @@ class FakeDownloader:
 
 
 def buttons(window: SettingsDialog) -> list[QPushButton]:
-    return [b for b in window.findChildren(QPushButton) if b.text() == "Скачать словарь"]
+    return [b for b in window.findChildren(QPushButton) if b.text() == "Download Dictionary"]
 
 
-@pytest.mark.parametrize("error", [None, "нет сети"])
+@pytest.mark.parametrize("error", [None, "no network"])
 def test_download_button_fetches_and_rechecks(
     dialog: tuple, monkeypatch: pytest.MonkeyPatch, error: str | None
 ) -> None:
     window, _changes, _captures = dialog
-    checks = [Check("Словарь uk", False, "hint", download="uk"), Check("Клавиатура", True, "")]
+    checks = [Check("Dictionary uk", False, "hint", download="uk"), Check("Keyboard", True, "")]
     monkeypatch.setattr(settings, "run_checks", lambda _layouts: checks)
     forgotten: list[bool] = []
     monkeypatch.setattr(settings, "forget_dictionaries", lambda: forgotten.append(True))
@@ -125,3 +106,17 @@ def test_sound_file_button_only_for_own_sound(
     assert changes[-1].sound_file == "/music/tick.ogg"
     assert window._sound_file.text() == "tick.ogg"
     assert played == [Path("/music/tick.ogg")]
+
+
+def test_translations_are_used(monkeypatch: pytest.MonkeyPatch) -> None:
+    import gettext
+
+    from ntrcn import i18n
+
+    class Russian(gettext.NullTranslations):
+        def gettext(self, message: str) -> str:
+            return {"Keyboard Layout": "Раскладка клавиатуры"}.get(message, message)
+
+    monkeypatch.setattr(i18n, "_translation", Russian())
+    assert i18n._("Keyboard Layout") == "Раскладка клавиатуры"
+    assert i18n._("Quit") == "Quit"

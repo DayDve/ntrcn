@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from ntrcn.i18n import _
 from ntrcn.spelling import locale_name
 
 OS_RELEASE = Path("/etc/os-release")
@@ -64,8 +65,10 @@ def install_command(package: str, family: str | None) -> str | None:
 def install_hint(language: str, family: str | None) -> str:
     """Tell how to install the dictionary for a language on this system."""
     if family is None:
-        return f"Установите словарь hunspell для языка «{language}» через менеджер пакетов"
+        return _("Install a hunspell dictionary for “{language}” with your package manager").format(
+            language=language
+        )
     package = dictionary_package(language, family)
     if family == "arch" and language in _ARCH_AUR_ONLY:
-        return f"Установите пакет {package} из AUR"
+        return _("Install the {package} package from the AUR").format(package=package)
     return install_command(package, family) or package

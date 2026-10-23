@@ -9,7 +9,6 @@ from pathlib import Path
 
 from ntrcn import APP_ID
 
-DESKTOP_FILE = Path(__file__).with_name(f"{APP_ID}.desktop")
 AUTOSTART_FILE = Path.home() / ".config" / "autostart" / f"{APP_ID}.desktop"
 _SRC_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,17 +22,22 @@ def _command() -> str:
 
 
 def is_enabled() -> bool:
-    """Tell whether ntrcn starts on login."""
-    return AUTOSTART_FILE.is_file()
+    """Tell whether ntrcn starts on login.
+
+    An entry with ``Hidden=true`` is one switched off in the Plasma autostart settings.
+    """
+    try:
+        entry = AUTOSTART_FILE.read_text(encoding="utf-8")
+    except OSError:
+        return False
+    return not re.search(r"(?m)^Hidden\s*=\s*true\s*$", entry)
 
 
 def set_enabled(enabled: bool) -> None:
-    """Create or remove the autostart entry, the main part of the app's desktop file."""
+    """Create or remove the autostart entry."""
     if not enabled:
         AUTOSTART_FILE.unlink(missing_ok=True)
         return
-    entry = DESKTOP_FILE.read_text(encoding="utf-8").split("\n[Desktop Action")[0]
-    entry = re.sub(r"(?m)^Actions=.*\n", "", entry)
-    entry = re.sub(r"(?m)^Exec=.*$", lambda _: f"Exec={_command()}", entry).rstrip() + "\n"
+    entry = f"[Desktop Entry]\nType=Application\nName=ntrcn\nExec={_command()}\nIcon={APP_ID}\n"
     AUTOSTART_FILE.parent.mkdir(parents=True, exist_ok=True)
     AUTOSTART_FILE.write_text(entry, encoding="utf-8")

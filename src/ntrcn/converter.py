@@ -1,4 +1,4 @@
-"""Retyping text in another layout when the hotkey is pressed."""
+"""Retyping text in another layout when a global shortcut is pressed."""
 
 from __future__ import annotations
 
@@ -6,12 +6,20 @@ import logging
 import time
 from collections.abc import Callable
 
-from evdev import ecodes as e
 from PySide6.QtCore import QTimer
 
-from ntrcn.convert import Fragment, Speller, next_layout, plan_retype, retyped_text, wrong_fragment
+from ntrcn.convert import (
+    Fragment,
+    Speller,
+    next_case,
+    next_layout,
+    plan_retype,
+    plan_typing,
+    retyped_text,
+    wrong_fragment,
+)
 from ntrcn.keymap import layout_chars
-from ntrcn.keys import MODIFIERS, SHIFT_KEYS, KeyBuffer, TypedKey
+from ntrcn.keys import MODIFIERS, KeyBuffer, TypedKey
 from ntrcn.layouts import KdeLayouts, Layout
 from ntrcn.selection import read_primary_selection
 from ntrcn.typer import Typer
@@ -31,13 +39,12 @@ LAYOUT_SETTLE_S = 0.05
 
 
 class Converter:
-    """Reacts to the hotkey: retypes the mistyped text or the selection in another layout."""
+    """Retypes the mistyped text or the selection in another layout."""
 
     def __init__(
         self,
         kde: KdeLayouts,
         typer: Typer,
-        hotkey: int = e.KEY_PAUSE,
         held_keys: Callable[[], set[int]] = set,
         on_layouts_changed: Callable[[list[Layout], int], None] = lambda _layouts, _current: None,
         on_convert: Callable[[], None] = lambda: None,
@@ -48,7 +55,6 @@ class Converter:
         Args:
             kde: Plasma layouts.
             typer: Virtual keyboard to retype with.
-            hotkey: evdev code of the hotkey; Shift + it converts the selection.
             held_keys: Returns the physical keys held right now.
             on_layouts_changed: Called with the layouts and the active index on any change.
             on_convert: Called right before text is retyped (e.g. to start a sound).
@@ -57,7 +63,6 @@ class Converter:
         """
         self._kde = kde
         self._typer = typer
-        self.hotkey = hotkey
         self._held_keys = held_keys
         self._on_layouts_changed = on_layouts_changed
         self._on_convert = on_convert
@@ -65,8 +70,6 @@ class Converter:
         # Buffer revision and word count of the last conversion, to repeat it.
         self._last_conversion: tuple[int, int] | None = None
         self.buffer = KeyBuffer()
-        # When set, the next non-modifier key press goes here instead of being handled.
-        self.key_capture: Callable[[int], None] | None = None
         self._busy = False
         self._mute_until = 0.0
         self.layouts: list[Layout] = []
@@ -87,18 +90,28 @@ class Converter:
         self._on_layouts_changed(self.layouts, index)
 
     def on_key_press(self, code: int, held: set[int]) -> None:
-        """Handle a key press from a physical keyboard."""
+        """Record a key press from a physical keyboard."""
         if self._busy or time.monotonic() < self._mute_until:
             return
-        if self.key_capture and code not in MODIFIERS:
-            capture, self.key_capture = self.key_capture, None
-            capture(code)
-            return
-        if code == self.hotkey:
-            action = self._convert_selection if held & SHIFT_KEYS else self._convert_typed
-            self._run_when_released(action)
-            return
         self.buffer.press(code, held, self.current)
+
+    def fix_typed(self) -> None:
+        """Retype the end of the typed text in the right layout (global shortcut)."""
+        self._start(self._convert_typed)
+
+    def fix_selection(self) -> None:
+        """Retype the selected text in another layout (global shortcut)."""
+        self._start(self._convert_selection)
+
+    def change_case(self) -> None:
+        """Cycle the case of the selected text (global shortcut)."""
+        self._start(self._change_case)
+
+    def _start(self, action: Callable[[], None]) -> None:
+        if self._busy:
+            return
+        self.buffer.undo_reset()  # the shortcut's own key press reset the buffer
+        self._run_when_released(action)
 
     def _run_when_released(self, action: Callable[[], None]) -> None:
         """Run ``action`` once no modifier is physically held, so they don't mix into typing."""
@@ -132,7 +145,7 @@ class Converter:
     def _convert_typed(self) -> None:
         """Retype the end of what was typed in another layout.
 
-        Pressing the hotkey again right away cycles the same text to the next layout.
+        Pressing the shortcut again right away cycles the same text to the next layout.
         """
         if len(self.layouts) < 2:
             return
@@ -197,4 +210,31 @@ class Converter:
         self._on_convert()
         self._switch_to(plan.target)
         self._typer.type(plan.strokes)
+        self.buffer.reset()
+
+    def _change_case(self) -> None:
+        text = read_primary_selection()
+        if not text or len(text) > MAX_SELECTION:
+            logger.info("No suitable selection (%d chars)", len(text))
+            return
+        changed = next_case(text)
+        if changed == text:
+            logger.info("Selection has no letters")
+            return
+        # The current layout first; otherwise one in which the text can be typed.
+        order = [self.current] + [i for i in range(len(self.layouts)) if i != self.current]
+        for index in order:
+            layout = self.layouts[index]
+            strokes = plan_typing(changed, layout_chars(layout.name, layout.variant))
+            if strokes is not None:
+                break
+        else:
+            logger.info("Selection cannot be typed in any layout")
+            return
+        logger.info("Changing the case of %d selected chars", len(changed))
+        self._on_convert()
+        self._switch_to(index)
+        self._typer.type(strokes)
+        # Select the text again, so that the next press goes on with the cycle.
+        self._typer.select_back(len(changed))
         self.buffer.reset()

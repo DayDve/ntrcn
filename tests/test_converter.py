@@ -37,12 +37,17 @@ class FakeKde:
 class FakeTyper:
     def __init__(self) -> None:
         self.log: list[Any] = []
+        self.strokes: list[Keystroke] = []
 
     def erase(self, count: int) -> None:
         self.log.append(("erase", count))
 
     def type(self, strokes: Iterable[Keystroke]) -> None:
-        self.log.append(("type", [s.code for s in strokes]))
+        self.strokes = list(strokes)
+        self.log.append(("type", [s.code for s in self.strokes]))
+
+    def select_back(self, count: int) -> None:
+        self.log.append(("select", count))
 
 
 @pytest.fixture
@@ -53,8 +58,14 @@ def setup() -> tuple[Converter, FakeKde, FakeTyper]:
 
 
 def press(converter: Converter, *codes: int, held: set[int] | None = None) -> None:
+    """Press keys; Pause also fires the global shortcut, as KWin does after the key event."""
     for code in codes:
         converter.on_key_press(code, held or set())
+        if code == e.KEY_PAUSE:
+            if held and e.KEY_LEFTSHIFT in held:
+                converter.fix_selection()
+            else:
+                converter.fix_typed()
 
 
 def test_pause_retypes_last_word_in_next_layout(setup: Any) -> None:
@@ -120,20 +131,12 @@ def test_on_convert_fires_before_retyping_and_only_then(
     assert typer.log == ["sound", ("erase", 1), ("type", [e.KEY_G])]
 
 
-def test_key_capture_takes_next_non_modifier_key(setup: Any) -> None:
-    converter, _kde, typer = setup
-    captured: list[int] = []
-    converter.key_capture = captured.append
-    press(converter, e.KEY_LEFTSHIFT, e.KEY_F13, e.KEY_G)
-    assert captured == [e.KEY_F13]
-    assert converter.key_capture is None
-    assert len(converter.buffer) == 1  # later keys are handled normally again
-
-
-def test_hotkey_can_be_changed(setup: Any) -> None:
+def test_shortcut_with_modifiers_still_finds_the_typed_text(setup: Any) -> None:
+    # Ctrl+Alt+X resets the buffer as a shortcut a moment before KDE reports it.
     converter, kde, typer = setup
-    converter.hotkey = e.KEY_F13
-    press(converter, e.KEY_G, e.KEY_F13)
+    press(converter, e.KEY_G)
+    converter.on_key_press(e.KEY_X, {e.KEY_LEFTCTRL, e.KEY_LEFTALT})
+    converter.fix_typed()
     assert kde.index == 1
     assert typer.log == [("erase", 1), ("type", [e.KEY_G])]
 
@@ -229,3 +232,31 @@ def test_typed_text_never_reaches_the_log(
     press(converter, e.KEY_PAUSE, held={e.KEY_LEFTSHIFT})
     assert caplog.records
     assert "ghbdtn" not in caplog.text and "привет" not in caplog.text
+
+
+def test_change_case_retypes_and_reselects(setup: Any, monkeypatch: pytest.MonkeyPatch) -> None:
+    converter, kde, typer = setup
+    monkeypatch.setattr(ntrcn.converter, "read_primary_selection", lambda: "ghb")
+    converter.change_case()
+    assert kde.index == 0  # the current layout has the letters
+    assert typer.log == [("type", [e.KEY_G, e.KEY_H, e.KEY_B]), ("select", 3)]
+    assert all(stroke.shift for stroke in typer.strokes)  # "GHB"
+
+
+def test_change_case_switches_to_a_layout_that_has_the_letters(
+    setup: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    converter, kde, typer = setup
+    monkeypatch.setattr(ntrcn.converter, "read_primary_selection", lambda: "привет")
+    converter.change_case()
+    assert kde.index == 1
+    assert typer.log[-1] == ("select", 6)
+
+
+def test_change_case_ignores_text_without_letters(
+    setup: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    converter, _kde, typer = setup
+    monkeypatch.setattr(ntrcn.converter, "read_primary_selection", lambda: "123")
+    converter.change_case()
+    assert typer.log == []
