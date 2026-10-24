@@ -8,7 +8,7 @@ All notable changes to this project are documented in this file. The format is b
 
 ### Added
 
-- `make install` and `make uninstall`: installs from source with the dependencies on Debian,
+- `make install`, `make update` and `make uninstall`: installs from source with the dependencies on Debian,
   Fedora, openSUSE and Arch based distributions; uninstalling removes only the dependencies
   it installed and nothing else needs.
 

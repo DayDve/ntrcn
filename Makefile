@@ -15,7 +15,7 @@ SUDO := $(if $(filter 0,$(shell id -u)),,sudo)
 # Reload udev rules only where udev runs (not in containers or with DESTDIR).
 UDEV_RUNNING := [ -z "$(DESTDIR)" ] && [ -S /run/udev/control ]
 
-.PHONY: help test lint format check run e2e pot translations install uninstall deb deb-check deb-test clean
+.PHONY: help test lint format check run e2e pot translations install update uninstall deb deb-check deb-test clean
 
 help:
 	@echo "make test           - run tests"
@@ -27,6 +27,7 @@ help:
 	@echo "make pot            - extract UI strings into po/ntrcn.pot and update po/*.po"
 	@echo "make translations   - compile po/*.po for running from the source tree"
 	@echo "make install        - install the dependencies, ntrcn into $(PREFIX) and the udev rule"
+	@echo "make update         - pull the latest sources and install them"
 	@echo "make uninstall      - remove all that, dependencies other packages need are kept"
 	@echo "make deb           - build the .deb in a Debian container (needs docker)"
 	@echo "make deb-check     - compare the .deb contents with scripts/deb-contents.txt"
@@ -91,6 +92,12 @@ install:
 	[ -n "$(DESTDIR)" ] || [ "$$(id -u)" = 0 ] || ! getent group input >/dev/null || \
 	  id -nG | grep -qw input || \
 	  { $(SUDO) usermod -aG input "$$(id -un)" && echo "Log out and back in to start using ntrcn."; }
+
+# A fresh make reads the Makefile as pulled.
+update:
+	git pull --ff-only
+	$(MAKE) install
+	! pgrep -fx '/usr/bin/python3 -m ntrcn( .*)?' >/dev/null || echo "Restart ntrcn to use the new version."
 
 uninstall:
 	$(SUDO) rm -rf $(LIB_DIR)

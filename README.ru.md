@@ -86,7 +86,7 @@ cd ntrcn
 make install
 ```
 
-Удаление — `make uninstall`.
+Обновление — `make update`, удаление — `make uninstall`.
 
 ## Использование
 
