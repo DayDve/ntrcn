@@ -27,7 +27,7 @@ help:
 	@echo "make pot            - extract UI strings into po/ntrcn.pot and update po/*.po"
 	@echo "make translations   - compile po/*.po for running from the source tree"
 	@echo "make install        - install the dependencies, ntrcn into $(PREFIX) and the udev rule"
-	@echo "make update         - pull the latest sources and install them"
+	@echo "make update         - git pull (in a clone) and install again"
 	@echo "make uninstall      - remove all that, dependencies other packages need are kept"
 	@echo "make deb           - build the .deb in a Debian container (needs docker)"
 	@echo "make deb-check     - compare the .deb contents with scripts/deb-contents.txt"
@@ -93,9 +93,10 @@ install:
 	  id -nG | grep -qw input || \
 	  { $(SUDO) usermod -aG input "$$(id -un)" && echo "Log out and back in to start using ntrcn."; }
 
-# A fresh make reads the Makefile as pulled.
+# In a git clone pulls first; an unpacked source archive is installed as it is. A fresh make
+# reads the Makefile as pulled.
 update:
-	git pull --ff-only
+	[ ! -d .git ] || git pull --ff-only
 	$(MAKE) install
 	! pgrep -fx '/usr/bin/python3 -m ntrcn( .*)?' >/dev/null || echo "Restart ntrcn to use the new version."
 
