@@ -86,7 +86,7 @@ cd ntrcn
 make install
 ```
 
-To remove it, run `make uninstall`.
+To update, run `make update`; to remove, `make uninstall`.
 
 ## Usage
 
