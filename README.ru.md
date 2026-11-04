@@ -170,7 +170,7 @@ make deb-check deb-test  # проверка состава пакета и ус�
 
 ## Лицензия
 
-MIT, см. [LICENSE](LICENSE). Флаги — [vlags](https://vlags.com), CC BY-SA 4.0; звук клавиатуры
+MPL-2.0, см. [LICENSE](LICENSE). Флаги — [vlags](https://vlags.com), CC BY-SA 4.0; звук клавиатуры
 собран из [Keyboard Soundpack #1](https://opengameart.org/content/keyboard-soundpack-1-typing-and-single-keystrokes),
 CC0.
 
