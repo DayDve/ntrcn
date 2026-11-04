@@ -45,5 +45,6 @@ The interface is written in English and translated with gettext (domain `ntrcn`)
    `src/ntrcn/__init__.py`, `debian/changelog` and the install commands in both READMEs;
    move `[Unreleased]` in `CHANGELOG.md` to `[X.Y.Z] - YYYY-MM-DD`.
 2. `make check deb deb-check deb-test`.
-3. Merge into `master`, tag `vX.Y.Z`, merge back into `develop`, attach the `.deb` to the
-   GitHub release.
+3. Merge into `master`, tag `vX.Y.Z`, merge back into `develop`, push the tag. CI builds the
+   `.deb` and publishes the GitHub release with the notes from `CHANGELOG.md`; do not create
+   the release by hand, or the CI job fails.
