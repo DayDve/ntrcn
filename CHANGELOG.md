@@ -6,6 +6,10 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+### Changed
+
+- The license is now MPL-2.0 instead of MIT.
+
 ### Added
 
 - `make install`, `make update` and `make uninstall`: installs from source with the dependencies on Debian,
