@@ -171,7 +171,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the development rules.
 
 ## License
 
-MIT, see [LICENSE](LICENSE). The flags are from [vlags](https://vlags.com), CC BY-SA 4.0;
+MPL-2.0, see [LICENSE](LICENSE). The flags are from [vlags](https://vlags.com), CC BY-SA 4.0;
 the keyboard sound is mixed from
 [Keyboard Soundpack #1](https://opengameart.org/content/keyboard-soundpack-1-typing-and-single-keystrokes),
 CC0.
